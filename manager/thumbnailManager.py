@@ -1,12 +1,13 @@
 import time
 import ctypes
+import math
 import maya.cmds as cmds
 import maya.mel as mel
 import maya.OpenMaya as OpenMaya
 import maya.OpenMayaUI as OpenMayaUI
 
 from raphScripts.junkbox.manager.mayaManager import MayaManager
-from PySide2.QtGui import QPixmap, QPainter, QImage
+from PySide2.QtGui import QPixmap, QPainter, QImage, QColor
 from PySide2.QtCore import Qt
 
 class ThumbnailManager(object):
@@ -73,7 +74,7 @@ class ThumbnailManager(object):
         pixmap = pixmap.copy( widthThreshold, heightThresh, minVal, minVal)
 
         final = QPixmap(minVal, minVal)
-        final.fill(QColor(92,92,92))
+        final.fill(Qt.black)
 
         painter = QPainter(final)
         painter.drawPixmap(0, 0, minVal, minVal, pixmap)
@@ -113,8 +114,8 @@ class ThumbnailManager(object):
     def simplifyView( cls, actView ):
         # hide UI elements   
 
-        attrKeys = ['sel', 'manipulators', 'grid', 'hud', 'hos']
-        attrValues = [0, 0, 0, 0, 0]
+        attrKeys = ['sel', 'manipulators', 'grid', 'hud', 'hos', 'cameras']
+        attrValues = [0, 0, 0, 0, 0, 0]
         attrOldValues = []
 
         # get old values
@@ -163,6 +164,13 @@ class ThumbnailManager(object):
         return pixmap
 
     @classmethod
+    def distanceBtwPos(cls, pos1, pos2):
+        dx = pos1[0] - pos2[0]
+        dy = pos1[1] - pos2[1]
+        dz = pos1[2] - pos2[2]
+        return math.sqrt( dx*dx + dy*dy + dz*dz )
+
+    @classmethod
     def getDefaultThumbnail( cls, onSelected = False ):
 
         (actView, view, camPath) = cls.getCurrentViewData()
@@ -173,9 +181,22 @@ class ThumbnailManager(object):
 
         # create a new camera and look though
 
-        defaultCamPos = [20, 15, 20]
+        
 
         cameraName = cmds.camera()
+
+        cmds.select(selection, add=True)
+
+        cmds.viewFit(cameraName[0])
+
+        cameraPos = cmds.xform( cameraName[0], q=True, ws=True, t=True)
+        defaultCamPos = [20, 10, 15]
+
+        defaultDistance = cls.distanceBtwPos([0,0,0], defaultCamPos)
+        distance = cls.distanceBtwPos(selectionCenter, cameraPos)
+
+        ratio = 1.3 / defaultDistance * distance
+        defaultCamPos = map(lambda x: x * ratio, defaultCamPos) 
 
         if onSelected:
             cmds.move( defaultCamPos[0] + selectionCenter[0], defaultCamPos[1] + selectionCenter[1], defaultCamPos[2] + selectionCenter[2], cameraName[0] )
@@ -186,7 +207,7 @@ class ThumbnailManager(object):
 
         cmds.lookThru( actView, cameraName[1], nc=0.001, fc=5000.0 )
 
-        cmds.select(selection, add=True)
+        
 
         restoreParam = cls.simplifyView( actView )
 

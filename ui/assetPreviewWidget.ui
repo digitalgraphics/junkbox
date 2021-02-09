@@ -295,6 +295,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="openInMayaButton">
+          <property name="text">
+           <string>open in maya</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>

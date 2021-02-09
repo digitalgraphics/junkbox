@@ -1,8 +1,9 @@
 from raphScripts.junkbox.component.thumbnailWidget import ThumbnailWidget
 from raphScripts.junkbox.ui.assetViewWidget import Ui_assetViewWidget
 from raphScripts.junkbox.manager.fileManager import FileManager
+from raphScripts.junkbox.view.browseCollectionDialog import BrowseCollectionDialog
 
-from PySide2.QtWidgets import QMainWindow, QWidget, QListWidget, QListWidgetItem, QTreeWidgetItem
+from PySide2.QtWidgets import QMainWindow, QWidget, QListWidget, QListWidgetItem, QTreeWidgetItem, QMessageBox
 from PySide2.QtCore import QSize, Qt, Signal
 from PySide2.QtGui import QIcon, QPixmap
 
@@ -19,16 +20,50 @@ class AssetViewWidget(QWidget):
         self.ui.thumbnailViewWidget.itemSelectionChanged.connect(self.listSelectionChanged)
         self.ui.listViewWidget.itemSelectionChanged.connect(self.treeSelectionChanged)
         self.ui.searchEdit.textChanged.connect(self.textSearchChanged)
-
         self.ui.thumbnailSizeSlider.valueChanged.connect(self.setThumbnailSize)
+        self.ui.styleViewButton.buttonPressed.connect(self.styleViewPressed)
+        self.ui.changeCollectionButton.buttonPressed.connect(self.changeCollectionPressed)
+        self.ui.removeButton.buttonPressed.connect(self.removePressed)
+
         self.setThumbnailSize( self.ui.thumbnailSizeSlider.value())
 
-        self.ui.styleViewButton.buttonPressed.connect(self.styleViewPressed)
         self.showThumbnailView()
         self.ui.collectionLabel.hide()
         self.ui.itemCountLabel.hide()
 
+        self.ui.changeCollectionButton.setEnabled(False)
+        self.ui.removeButton.setEnabled(False)
+
         self.assetList = []
+        self.rootDirPath = None
+
+    def changeCollectionPressed(self):
+        browseCollectionDialog = BrowseCollectionDialog( self.rootDirPath, self.parent())
+
+        if browseCollectionDialog.exec_():
+            filePaths = self.getFilePathSelected()
+            curFolder = FileManager.getFolderPathOfFile(filePaths[0])
+            destFolder = browseCollectionDialog.getAbsolutePath()
+
+            if FileManager.normPath(curFolder) == FileManager.normPath(destFolder):
+                QMessageBox.warning( self, 'Destination and source match', 'The destination collection corresponds to the source collection', QMessageBox.StandardButton.Ok )
+            else:
+                FileManager.moveMayaFilesToDir(filePaths, destFolder)
+                self.removeSelectedItems()
+
+    def removePressed(self):
+        filePaths = self.getFilePathSelected()
+
+        message = 'Are you sure to delete 1 asset ?'
+
+        if len(filePaths) > 1:
+            message = 'Are you sure to delete ' + str(len(filePaths)) + ' assets ?'
+
+        reply = QMessageBox.question( self, 'Delete assets', message, QMessageBox.Yes, QMessageBox.No )
+
+        if reply == QMessageBox.Yes:
+            FileManager.removeMayaFiles(filePaths)
+            self.removeSelectedItems()
 
     def textSearchChanged(self, text):
         self.ui.thumbnailViewWidget.blockSignals(True)
@@ -71,7 +106,6 @@ class AssetViewWidget(QWidget):
 
         self.updateSelectedItems(selectedIndicesSet)
 
-
     def listSelectionChanged(self ):
         selectedItems = self.ui.thumbnailViewWidget.selectedItems()
         selectedIndicesSet = set()
@@ -80,6 +114,52 @@ class AssetViewWidget(QWidget):
             selectedIndicesSet.add(selectedItem.data( Qt.UserRole))
 
         self.updateSelectedItems(selectedIndicesSet)
+
+    def removeSelectedItems(self):
+        self.ui.thumbnailViewWidget.blockSignals(True)
+        self.ui.listViewWidget.blockSignals(True)
+
+        self.removeSelectedList()
+        self.removeSelectedTree()
+
+        self.ui.thumbnailViewWidget.clearSelection()
+        self.ui.listViewWidget.clearSelection()     
+
+        self.ui.thumbnailViewWidget.blockSignals(False)
+        self.ui.listViewWidget.blockSignals(False)
+
+        self.ui.changeCollectionButton.setEnabled(False)
+        self.ui.removeButton.setEnabled(False)
+
+        self.selectionChanged.emit([])
+
+    def removeSelectedList(self):
+        selectedItems = self.ui.thumbnailViewWidget.selectedItems()
+
+        if not selectedItems:
+            return   
+
+        for item in selectedItems:
+            self.ui.thumbnailViewWidget.takeItem(self.ui.thumbnailViewWidget.row(item))
+
+    def removeSelectedTree(self):
+        selectedItems = self.ui.listViewWidget.selectedItems()
+
+        if not selectedItems:
+            return   
+
+        for item in selectedItems:
+            self.ui.listViewWidget.invisibleRootItem().removeChild(item)
+            del item
+
+    def getFilePathSelected(self):
+        selectedItems = self.ui.listViewWidget.selectedItems()
+        selectedFilePath = []
+
+        for item in selectedItems:
+            selectedFilePath.append(self.assetList[item.data( 0, Qt.UserRole)][2])
+
+        return selectedFilePath
         
 
     def updateSelectedItems(self, selectedIndicesSet ):
@@ -88,6 +168,13 @@ class AssetViewWidget(QWidget):
 
         self.ui.thumbnailViewWidget.blockSignals(True)
         self.ui.listViewWidget.blockSignals(True)
+
+        if len(selectedIndicesSet) > 0:
+            self.ui.changeCollectionButton.setEnabled(True)
+            self.ui.removeButton.setEnabled(True)
+        else:
+            self.ui.changeCollectionButton.setEnabled(False)
+            self.ui.removeButton.setEnabled(False)
 
         selectedFilePath = []
 
@@ -118,10 +205,22 @@ class AssetViewWidget(QWidget):
     def clear(self):
         self.ui.thumbnailViewWidget.clear()
         self.ui.listViewWidget.clear()
+        self.ui.itemCountLabel.hide()
+        self.ui.collectionLabel.hide()
+        self.ui.changeCollectionButton.setEnabled(False)
+        self.ui.removeButton.setEnabled(False)
         self.assetList = []
+
+    def loadFolder(self, workingDirPath, rootDirPath):
+        fileList = FileManager.getMayaFilesFromFolder(workingDirPath)
+        title = FileManager.getFolderBaseName(workingDirPath)
+        self.loadFiles( fileList, title, rootDirPath)
     
-    def loadFiles( self, fileList):  
+    def loadFiles( self, fileList, title, rootDirPath): 
+        self.rootDirPath = rootDirPath
         self.clear()
+
+        self.setTitle(title)
 
         filterText = self.ui.searchEdit.text()
 

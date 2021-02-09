@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/rjouretz/Documents/maya/2018/prefs/scripts/raphScripts/junkbox/ui/assetPreviewWidget.ui'
 #
-# Created: Tue Feb  9 10:39:54 2021
+# Created: Tue Feb  9 22:23:08 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -42,20 +42,6 @@ class Ui_assetPreviewWidget(object):
         self.horizontalLayout_2.addWidget(self.label)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
-        self.singleChangeCollectionButton = FlatButton(self.singleAssetWidget)
-        self.singleChangeCollectionButton.setText("")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icon/changeCollection.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.singleChangeCollectionButton.setIcon(icon)
-        self.singleChangeCollectionButton.setObjectName("singleChangeCollectionButton")
-        self.horizontalLayout_2.addWidget(self.singleChangeCollectionButton)
-        self.singleRemoveButton = FlatButton(self.singleAssetWidget)
-        self.singleRemoveButton.setText("")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icon/remove.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.singleRemoveButton.setIcon(icon1)
-        self.singleRemoveButton.setObjectName("singleRemoveButton")
-        self.horizontalLayout_2.addWidget(self.singleRemoveButton)
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
         spacerItem1 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_6.addItem(spacerItem1)
@@ -137,6 +123,9 @@ class Ui_assetPreviewWidget(object):
         self.blankWidget.setSizePolicy(sizePolicy)
         self.blankWidget.setObjectName("blankWidget")
         self.verticalLayout_6.addWidget(self.blankWidget)
+        self.openInMayaButton = QtWidgets.QPushButton(self.singleAssetWidget)
+        self.openInMayaButton.setObjectName("openInMayaButton")
+        self.verticalLayout_6.addWidget(self.openInMayaButton)
         self.verticalLayout_2.addWidget(self.singleAssetWidget)
         self.multiAssetsWidget = QtWidgets.QWidget(assetPreviewWidget)
         self.multiAssetsWidget.setObjectName("multiAssetsWidget")
@@ -144,23 +133,6 @@ class Ui_assetPreviewWidget(object):
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_3.setSpacing(0)
-        self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem2)
-        self.multiChangeCollectionButton = FlatButton(self.multiAssetsWidget)
-        self.multiChangeCollectionButton.setText("")
-        self.multiChangeCollectionButton.setIcon(icon)
-        self.multiChangeCollectionButton.setObjectName("multiChangeCollectionButton")
-        self.horizontalLayout_3.addWidget(self.multiChangeCollectionButton)
-        self.multiRemoveButton = FlatButton(self.multiAssetsWidget)
-        self.multiRemoveButton.setText("")
-        self.multiRemoveButton.setIcon(icon1)
-        self.multiRemoveButton.setObjectName("multiRemoveButton")
-        self.horizontalLayout_3.addWidget(self.multiRemoveButton)
-        self.verticalLayout_4.addLayout(self.horizontalLayout_3)
         self.assetSelectedLabel = QtWidgets.QLabel(self.multiAssetsWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -188,8 +160,6 @@ class Ui_assetPreviewWidget(object):
     def retranslateUi(self, assetPreviewWidget):
         assetPreviewWidget.setWindowTitle(QtWidgets.QApplication.translate("assetPreviewWidget", "Form", None, -1))
         self.label.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "File summary", None, -1))
-        self.singleChangeCollectionButton.setToolTip(QtWidgets.QApplication.translate("assetPreviewWidget", "move the asset to another collection", None, -1))
-        self.singleRemoveButton.setToolTip(QtWidgets.QApplication.translate("assetPreviewWidget", "remove the asset", None, -1))
         self.label_2.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "File name", None, -1))
         self.fileNameLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "TextLabel", None, -1))
         self.label_3.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "File type", None, -1))
@@ -200,11 +170,9 @@ class Ui_assetPreviewWidget(object):
         self.fileCreatedDateLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "TextLabel", None, -1))
         self.lastModifiedDateLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "Last modified", None, -1))
         self.fileLastModifiedDateLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "TextLabel", None, -1))
-        self.multiChangeCollectionButton.setToolTip(QtWidgets.QApplication.translate("assetPreviewWidget", "move the assets to another collection", None, -1))
-        self.multiRemoveButton.setToolTip(QtWidgets.QApplication.translate("assetPreviewWidget", "remove the assets", None, -1))
+        self.openInMayaButton.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "open in maya", None, -1))
         self.assetSelectedLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "x assets selected", None, -1))
         self.importReferenceButton.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "import as reference", None, -1))
         self.importCopyButton.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "import as copy", None, -1))
 
-from raphScripts.junkbox.component.flatButton import FlatButton
 from raphScripts.junkbox.resource import resource_rc

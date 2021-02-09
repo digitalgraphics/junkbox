@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/rjouretz/Documents/maya/2018/prefs/scripts/raphScripts/junkbox/ui/mainWindow.ui'
 #
-# Created: Tue Feb  9 10:39:54 2021
+# Created: Tue Feb  9 22:23:08 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(880, 529)
+        MainWindow.resize(1149, 602)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -71,15 +71,24 @@ class Ui_MainWindow(object):
         self.assetPreviewSeparator.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.assetPreviewSeparator.setObjectName("assetPreviewSeparator")
         self.horizontalLayout.addWidget(self.assetPreviewSeparator)
-        self.assetPreviewWidget = AssetPreviewWidget(self.centralwidget)
-        self.assetPreviewWidget.setMinimumSize(QtCore.QSize(200, 0))
-        self.assetPreviewWidget.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.assetPreviewContainerWidget = QtWidgets.QWidget(self.centralwidget)
+        self.assetPreviewContainerWidget.setMinimumSize(QtCore.QSize(200, 0))
+        self.assetPreviewContainerWidget.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.assetPreviewContainerWidget.setObjectName("assetPreviewContainerWidget")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.assetPreviewContainerWidget)
+        self.verticalLayout_2.setSpacing(0)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.assetPreviewWidget = AssetPreviewWidget(self.assetPreviewContainerWidget)
+        self.assetPreviewWidget.setMinimumSize(QtCore.QSize(0, 0))
+        self.assetPreviewWidget.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.assetPreviewWidget.setObjectName("assetPreviewWidget")
-        self.horizontalLayout.addWidget(self.assetPreviewWidget)
+        self.verticalLayout_2.addWidget(self.assetPreviewWidget)
+        self.horizontalLayout.addWidget(self.assetPreviewContainerWidget)
         self.verticalLayout.addLayout(self.horizontalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 880, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1149, 21))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
 

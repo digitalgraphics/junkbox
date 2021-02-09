@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/rjouretz/Documents/maya/2018/prefs/scripts/raphScripts/junkbox/ui/assetViewWidget.ui'
 #
-# Created: Tue Feb  9 10:39:54 2021
+# Created: Tue Feb  9 22:23:08 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -61,20 +61,20 @@ class Ui_assetViewWidget(object):
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setSpacing(0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.singleChangeCollectionButton = FlatButton(assetViewWidget)
-        self.singleChangeCollectionButton.setText("")
+        self.changeCollectionButton = FlatButton(assetViewWidget)
+        self.changeCollectionButton.setText("")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap(":/icon/changeCollection.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.singleChangeCollectionButton.setIcon(icon2)
-        self.singleChangeCollectionButton.setObjectName("singleChangeCollectionButton")
-        self.horizontalLayout_3.addWidget(self.singleChangeCollectionButton)
-        self.singleRemoveButton = FlatButton(assetViewWidget)
-        self.singleRemoveButton.setText("")
+        self.changeCollectionButton.setIcon(icon2)
+        self.changeCollectionButton.setObjectName("changeCollectionButton")
+        self.horizontalLayout_3.addWidget(self.changeCollectionButton)
+        self.removeButton = FlatButton(assetViewWidget)
+        self.removeButton.setText("")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap(":/icon/remove.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.singleRemoveButton.setIcon(icon3)
-        self.singleRemoveButton.setObjectName("singleRemoveButton")
-        self.horizontalLayout_3.addWidget(self.singleRemoveButton)
+        self.removeButton.setIcon(icon3)
+        self.removeButton.setObjectName("removeButton")
+        self.horizontalLayout_3.addWidget(self.removeButton)
         self.horizontalLayout_2.addLayout(self.horizontalLayout_3)
         self.searchEdit = QtWidgets.QLineEdit(assetViewWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -114,8 +114,8 @@ class Ui_assetViewWidget(object):
         assetViewWidget.setWindowTitle(QtWidgets.QApplication.translate("assetViewWidget", "Form", None, -1))
         self.collectionLabel.setText(QtWidgets.QApplication.translate("assetViewWidget", "CollectionName", None, -1))
         self.itemCountLabel.setText(QtWidgets.QApplication.translate("assetViewWidget", "x assets", None, -1))
-        self.singleChangeCollectionButton.setToolTip(QtWidgets.QApplication.translate("assetViewWidget", "move the asset to another collection", None, -1))
-        self.singleRemoveButton.setToolTip(QtWidgets.QApplication.translate("assetViewWidget", "remove the asset", None, -1))
+        self.changeCollectionButton.setToolTip(QtWidgets.QApplication.translate("assetViewWidget", "move the asset to another collection", None, -1))
+        self.removeButton.setToolTip(QtWidgets.QApplication.translate("assetViewWidget", "remove the asset", None, -1))
         self.searchEdit.setPlaceholderText(QtWidgets.QApplication.translate("assetViewWidget", "Search ...", None, -1))
         self.listViewWidget.setSortingEnabled(True)
         self.listViewWidget.headerItem().setText(0, QtWidgets.QApplication.translate("assetViewWidget", "     Name", None, -1))

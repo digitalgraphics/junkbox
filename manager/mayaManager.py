@@ -19,7 +19,7 @@ class MayaManager(object):
         if filename[0] == "/" or filename[1] == "\\":
             filename = filename[1:]
 
-        mayaFilename = os.path.join( path, filename + ".mb")
+        mayaFilename = os.path.join( path, filename + ".ma")
         thumbnailFilename = os.path.join( path, filename + ".jpg")
 
         selection = cmds.ls(selection = True)
@@ -31,7 +31,7 @@ class MayaManager(object):
         if centered:
             cls.groupSelected(filename)
 
-        cmds.file( mayaFilename, force=True, options="v=0;", type="mayaBinary", preserveReferences=True, exportSelected=True)
+        cmds.file( mayaFilename, force=True, options="v=0;", type="mayaAscii", preserveReferences=True, exportSelected=True)
         pixmap.save(thumbnailFilename, 'jpg')
 
         if centered:
@@ -40,13 +40,18 @@ class MayaManager(object):
         return True
 
     @classmethod
+    def openInMaya(cls, filename):
+        mel.eval('file -f -options "v=0;"  -ignoreVersion  -typ "mayaAscii" -o "' + filename + '";')
+        mel.eval('addRecentFile("' + filename + '", "mayaAscii");')
+
+    @classmethod
     def importScene(cls, filename, asReference=True):
         basename = FileManager.getFileBaseName(filename, withExtension=False)
 
         if asReference:
-            mel.eval('file -r -type "mayaBinary"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "' + basename + '" -options "v=0;" "' + filename + '";')
+            mel.eval('file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "' + basename + '" -options "v=0;" "' + filename + '";')
         else:   
-            mel.eval('file -import -type "mayaBinary"  -ignoreVersion -ra true -mergeNamespacesOnClash false -namespace "' + basename + '" -options "v=0;"  -pr  -importTimeRange "combine" "' + filename + '";')
+            mel.eval('file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash false -options "v=0;"  -pr  -importTimeRange "combine" "' + filename + '";')
 
     @classmethod
     def groupSelected( cls, groupName ):
@@ -68,17 +73,9 @@ class MayaManager(object):
     @classmethod
     def getCenterSelected(cls):
         selection = cmds.ls(selection=True)
-        centroid = [0,0,0]
 
-        for obj in selection:
-            objCenter = cmds.xform(obj, q=True, ws=True, rp=True)
-            centroid[0] += objCenter[0]
-            centroid[1] += objCenter[1]
-            centroid[2] += objCenter[2]
-
-        centroid[0] /= len(selection)
-        centroid[1] /= len(selection)
-        centroid[2] /= len(selection)
+        bbox = cmds.exactWorldBoundingBox( selection )
+        centroid = [ (bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2, (bbox[2] + bbox[5]) / 2]
 
         return centroid
 

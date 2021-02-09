@@ -93,11 +93,9 @@ class MainWindow(QMainWindow):
 
     def hidePreview(self):
         self.ui.assetPreviewWidget.hide()
-        self.ui.assetPreviewSeparator.hide()
 
     def showPreview(self):
         self.ui.assetPreviewWidget.show()
-        self.ui.assetPreviewSeparator.show()
 
     def collectionRemoved(self, dirPath):
         self.hidePreview()
@@ -119,10 +117,7 @@ class MainWindow(QMainWindow):
 
     def collectionClicked(self, path):
         fullPath = self.ui.assetHierarchyWidget.getSelectedCollectionPath(True)
-        fileList = FileManager.getMayaFilesFromFolder(fullPath)
-        self.ui.assetViewWidget.loadFiles(fileList)
-        title = self.ui.assetHierarchyWidget.getSelectedCollectionName()
-        self.ui.assetViewWidget.setTitle(title)
+        self.ui.assetViewWidget.loadFolder(fullPath, self.workingDirPath)
 
     def openCreationDialog(self):
         self.creationDialog = CreationDialog( self.workingDirPath, self)

@@ -12,9 +12,6 @@ import os
 
 class AssetPreviewWidget(QWidget):
 
-    assetsRemoved = Signal(list)
-    assetsChanged = Signal(list)
-
     def __init__(self, *args, **kwargs):
         super(AssetPreviewWidget, self).__init__(*args, **kwargs)
         self.ui = Ui_assetPreviewWidget()
@@ -22,23 +19,12 @@ class AssetPreviewWidget(QWidget):
 
         self.ui.importCopyButton.clicked.connect(self.importCopyClicked)
         self.ui.importReferenceButton.clicked.connect(self.importReferenceClicked)
-        self.ui.singleChangeCollectionButton.buttonPressed.connect(self.openBrowseWidget)
-        self.ui.singleRemoveButton.buttonPressed.connect(self.removePressed)
-        self.ui.multiChangeCollectionButton.buttonPressed.connect(self.openBrowseWidget)
-        self.ui.multiRemoveButton.buttonPressed.connect(self.removePressed)
+        self.ui.openInMayaButton.clicked.connect(self.openInMayaClicked)
 
         self.filePaths = None
 
-    def openBrowseWidget(self):
-        browseCollectionDialog = BrowseCollectionDialog( self.workingDirPath, self.parent())
-
-        if browseCollectionDialog.exec_():
-            self.moveFilesToDir(self.filePaths, browseCollectionDialog.getAbsolutePath())
-
-    def removePressed(self):
-        FileManager.removeFiles(self.filePaths)
-        self.assetsRemoved.emit(self.filePaths)
-
+    def openInMayaClicked( self ):
+        MayaManager.openInMaya(self.filePaths[0])
 
     def importCopyClicked( self ):
         for path in self.filePaths:

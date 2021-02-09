@@ -4,6 +4,8 @@ import time
 import math
 import shutil
 
+from raphScripts.junkbox.resource import resource_rc
+
 class FileManager(object):
     dataPath = "C:/Users/rjouretz/Documents/maya/2018/prefs/scripts/raphScripts/junkbox/DATA"
 
@@ -14,7 +16,7 @@ class FileManager(object):
         if os.path.exists(thumbnailPath):
             return thumbnailPath
         else:
-            return None
+            return ":/icon/mayaLogo.png"
 
     @classmethod
     def getFileBaseName(cls, filePath, withExtension=True):
@@ -24,6 +26,11 @@ class FileManager(object):
             return basename
         else:
             return basename.split(".")[0]
+
+    @classmethod
+    def getFolderBaseName(cls, dirPath):
+        basename = os.path.basename(dirPath)
+        return basename
 
     @classmethod
     def getFileCreationDate(cls, filePath):
@@ -51,6 +58,10 @@ class FileManager(object):
         return '%s %s' % (f, suffixes[rank])
 
     @classmethod
+    def getFolderPathOfFile(cls, filePath):
+        return os.path.dirname(os.path.abspath(filePath))
+
+    @classmethod
     def createFolder(cls, folderPath):
         os.mkdir(folderPath)
 
@@ -72,19 +83,32 @@ class FileManager(object):
         return dirToDict(path)
 
     @classmethod
-    def removeFolder(cls, folderPath):
-        os.rmdir(folderPath)
+    def normPath(cls, path):
+        return os.path.normpath(path)
 
     @classmethod
-    def removeFiles(cls, filePaths):
+    def removeFolder(cls, folderPath):
+        shutil.rmtree(folderPath)
+
+    @classmethod
+    def removeMayaFiles(cls, filePaths):
         for path in filePaths:
             if os.path.exists(path):
                 os.remove(path)
 
+                thumbnailPath = cls.getFileThumbnail(path)
+                if os.path.exists(thumbnailPath):
+                    os.remove(thumbnailPath)
+
     @classmethod
-    def moveFilesToDir(cls, srcPaths, destDir):
-        for f in srcPaths:
-            shutil.move(f, destDir)
+    def moveMayaFilesToDir(cls, srcPaths, destDir):
+        for path in srcPaths:
+            if cls.normPath(destDir) != cls.normPath(cls.getFolderPathOfFile(path)):
+                shutil.move(path, destDir)
+
+                thumbnailPath = cls.getFileThumbnail(path)
+                if os.path.exists(thumbnailPath):
+                    shutil.move(thumbnailPath, destDir)
 
     @classmethod
     def getMayaFilesFromFolder(cls, folderPath):
