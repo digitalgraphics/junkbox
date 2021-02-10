@@ -1,5 +1,5 @@
 from raphScripts.junkbox.resource import resource_rc
-from raphScripts.junkbox.manager.fileManager import FileManager
+from raphScripts.junkbox.manager.fileManager import FileManager, FilterMode
 from raphScripts.junkbox.ui.assetHierarchyWidget import Ui_assetHierarchyWidget
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QListWidget, QListWidgetItem, QTreeWidgetItem, QInputDialog, QMessageBox
@@ -7,6 +7,7 @@ from PySide2.QtCore import QSize, Qt, Signal
 from PySide2.QtGui import QIcon, QPixmap
 
 import os
+
 
 class AssetHierarchyWidget(QWidget):
     collectionDoubleClicked = Signal(str)
@@ -24,8 +25,10 @@ class AssetHierarchyWidget(QWidget):
         self.ui.treeWidget.itemDoubleClicked.connect(self.elemDoubleClicked)
         self.ui.treeWidget.itemClicked.connect(self.elemClicked)
         self.ui.treeWidget.itemDeselected.connect(self.elemDeselected)
-        self.ui.addCollectionButton.buttonPressed.connect(self.addCollectionClicked)
-        self.ui.removeCollectionButton.buttonPressed.connect(self.removeCollectionClicked)
+        self.ui.addCollectionButton.buttonPressed.connect(
+            self.addCollectionClicked)
+        self.ui.removeCollectionButton.buttonPressed.connect(
+            self.removeCollectionClicked)
 
         self.dirPath = None
 
@@ -36,21 +39,22 @@ class AssetHierarchyWidget(QWidget):
         self.ui.treeWidget.clear()
 
     def refresh(self):
+        self.setFolders(self.dirPath)
+
+    def setFolders(self, dirpath, filterKeyword=None):
         self.clear()
-        self.setFolders( self.dirPath)
-
-    def setFolders(self, dirpath):
         self.dirPath = dirpath
-        dirDict = FileManager.getFolders(self.dirPath)
+        dirDict = FileManager.getFolders(
+            self.dirPath, filterKeyword, FilterMode.FolderAndFile)
 
-        def createDir( item, curDict):
+        def createDir(item, curDict):
             for k, v in curDict.items():
                 child = QTreeWidgetItem(item, [k])
                 child.setIcon(0, QIcon(":/icon/collection.png"))
 
-                createDir( child, v)
+                createDir(child, v)
 
-        createDir( self.ui.treeWidget, dirDict )
+        createDir(self.ui.treeWidget, dirDict)
 
     def openCollectionPath(self, collectionPath):
         collections = collectionPath.split("/")
@@ -62,12 +66,12 @@ class AssetHierarchyWidget(QWidget):
                 for i in range(nbChildren):
                     item = parent.child(i)
                     name = item.text(0)
-                    
+
                     if collection in name:
                         item.setExpanded(True)
                         parent = item
                         break
-                        
+
         if parent:
             self.ui.treeWidget.setCurrentItem(parent)
             self.ui.treeWidget.itemClicked.emit(parent, 0)
@@ -76,16 +80,18 @@ class AssetHierarchyWidget(QWidget):
         selection = self.ui.treeWidget.selectedItems()
 
         if len(selection) < 1:
-            self.removeCollection( None )  
+            self.removeCollection(None)
         else:
-            self.removeCollection( selection[0] )     
+            self.removeCollection(selection[0])
 
-    def removeCollection( self, item ):
+    def removeCollection(self, item):
         if not item:
-            QMessageBox.warning( self, 'No collection selected', 'Please select a collection to remove', QMessageBox.StandardButton.Ok )
+            QMessageBox.warning(self, 'No collection selected',
+                                'Please select a collection to remove', QMessageBox.StandardButton.Ok)
             return
 
-        reply = QMessageBox.question( self, 'Delete a collection', 'Are you sure to delete the collection "' + item.text(0) + '" ?', QMessageBox.Yes, QMessageBox.No )
+        reply = QMessageBox.question(self, 'Delete a collection', 'Are you sure to delete the collection "' +
+                                     item.text(0) + '" ?', QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.No:
             return
@@ -95,8 +101,8 @@ class AssetHierarchyWidget(QWidget):
         if not parent:
             parent = self.ui.treeWidget.invisibleRootItem()
 
-        parent.takeChild( parent.indexOfChild(item))
         fullpath = self.getCollectionPath(item, True)
+        parent.takeChild(parent.indexOfChild(item))
 
         if fullpath[0] == "/" or fullpath[1] == "\\":
             fullpath = fullpath[1:]
@@ -114,23 +120,29 @@ class AssetHierarchyWidget(QWidget):
             parent = selection[0]
             description = "New collection inside " + parent.text(0)
 
-
         nameAlreadyExists = True
 
         while nameAlreadyExists:
             nameWrongFormat = True
 
             while nameWrongFormat:
-                text, ok = QInputDialog.getText(self, 'New collection', description) 
+                text, ok = QInputDialog.getText(
+                    self, 'New collection', description)
+
+                if not ok:
+                    return
 
                 if not text:
-                    QMessageBox.warning( self, 'Wrong name format', 'The name cannot be empty', QMessageBox.StandardButton.Ok )
+                    QMessageBox.warning(
+                        self, 'Wrong name format', 'The name cannot be empty', QMessageBox.StandardButton.Ok)
 
                 elif " " in text:
-                    QMessageBox.warning( self, 'Wrong name format', 'The name cannot contain spaces', QMessageBox.StandardButton.Ok )
+                    QMessageBox.warning(
+                        self, 'Wrong name format', 'The name cannot contain spaces', QMessageBox.StandardButton.Ok)
 
                 elif text[0].isdigit():
-                    QMessageBox.warning( self, 'Wrong name format', 'The name cannot start with a number', QMessageBox.StandardButton.Ok )
+                    QMessageBox.warning(
+                        self, 'Wrong name format', 'The name cannot start with a number', QMessageBox.StandardButton.Ok)
 
                 else:
                     nameWrongFormat = False
@@ -140,19 +152,19 @@ class AssetHierarchyWidget(QWidget):
             child_count = parent.childCount()
             for i in range(child_count):
                 item = parent.child(i)
-                name = item.text(0) # text at first (0) column
-                
+                name = item.text(0)  # text at first (0) column
+
                 if name == text:
                     nameAlreadyExists = True
-                    QMessageBox.warning( self, 'Existing collection', 'The collection "' + name + '" already exists', QMessageBox.StandardButton.Ok )
+                    QMessageBox.warning(self, 'Existing collection', 'The collection "' +
+                                        name + '" already exists', QMessageBox.StandardButton.Ok)
 
-
-        if ok and text:  
+        if ok and text:
             if len(selection) > 0:
-                parent.setExpanded(True)                                                                                                                 
-            self.addCollection( text, parent)  
+                parent.setExpanded(True)
+            self.addCollection(text, parent)
 
-    def addCollection( self, name, parent):
+    def addCollection(self, name, parent):
         item = QTreeWidgetItem(parent, [name])
         item.setIcon(0, QIcon(":/icon/collection.png"))
         self.ui.treeWidget.setCurrentItem(item)
@@ -161,7 +173,8 @@ class AssetHierarchyWidget(QWidget):
         if fullpath[0] == "/" or fullpath[1] == "\\":
             fullpath = fullpath[1:]
 
-        FileManager.createFolder( fullpath)
+        FileManager.createFolder(fullpath)
+        self.ui.treeWidget.itemClicked.emit(item, 0)
 
     def elemDoubleClicked(self, collection, column):
         localPath = self.getSelectedCollectionPath()
@@ -199,6 +212,6 @@ class AssetHierarchyWidget(QWidget):
             if path[0] == "/" or path[1] == "\\":
                 path = path[1:]
 
-            return os.path.join(self.dirPath, path)
+            return os.path.join(self.dirPath, path).replace("\\", "/")
         else:
             return path

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/rjouretz/Documents/maya/2018/prefs/scripts/raphScripts/junkbox/ui/creationDialog.ui'
 #
-# Created: Tue Feb  9 22:23:08 2021
+# Created: Wed Feb 10 18:08:53 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!

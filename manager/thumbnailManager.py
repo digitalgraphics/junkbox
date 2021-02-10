@@ -10,18 +10,20 @@ from raphScripts.junkbox.manager.mayaManager import MayaManager
 from PySide2.QtGui import QPixmap, QPainter, QImage, QColor
 from PySide2.QtCore import Qt
 
+
 class ThumbnailManager(object):
 
     @classmethod
-    def screenshotView( cls, view):
+    def screenshotView(cls, view):
         # screenshot the viewport
 
-        #read the color buffer from the view, and save the MImage to disk
+        # read the color buffer from the view, and save the MImage to disk
         image = OpenMaya.MImage()
-        
-        if view.getRendererName() == view.kViewport2Renderer:   
-            # viewport 2   
-            image.create(view.portWidth(), view.portHeight(), 4, OpenMaya.MImage.kFloat)
+
+        if view.getRendererName() == view.kViewport2Renderer:
+            # viewport 2
+            image.create(view.portWidth(), view.portHeight(),
+                         4, OpenMaya.MImage.kFloat)
             view.readColorBuffer(image)
             image.convertPixelFormat(OpenMaya.MImage.kByte)
         else:
@@ -30,7 +32,8 @@ class ThumbnailManager(object):
 
         width = view.portWidth()
         height = view.portHeight()
-        ptr = ctypes.cast(image.pixels().__long__(), ctypes.POINTER(ctypes.c_char))
+        ptr = ctypes.cast(image.pixels().__long__(),
+                          ctypes.POINTER(ctypes.c_char))
         ptrAsStr = ctypes.string_at(ptr, width * height * 4)
         qimg = QImage(ptrAsStr, width, height, QImage.Format_ARGB32)
         #qimg = qimg.rgbSwapped().mirrored(horizontal=False, vertical=True)
@@ -61,17 +64,15 @@ class ThumbnailManager(object):
         # buf = buf.from_address(long(image.pixels()))
         # qimage = QImage(buf, width, height, QImage.Format_RGB32).rgbSwapped()
 
-
-
         # resize image
         pixmap = QPixmap.fromImage(qimg)
         width = pixmap.size().width()
         height = pixmap.size().height()
-        minVal = min( width, height)
+        minVal = min(width, height)
         widthThreshold = (width - minVal) / 2
         heightThresh = (height - minVal) / 2
 
-        pixmap = pixmap.copy( widthThreshold, heightThresh, minVal, minVal)
+        pixmap = pixmap.copy(widthThreshold, heightThresh, minVal, minVal)
 
         final = QPixmap(minVal, minVal)
         final.fill(Qt.black)
@@ -83,21 +84,21 @@ class ThumbnailManager(object):
         return final
 
     @classmethod
-    def getCurrentViewData( cls ):
+    def getCurrentViewData(cls):
         # get the name of the current camera
 
         mel.eval('setNamedPanelLayout( "Single Perspective View" )')
 
-        def intersection(lst1, lst2): 
-            lst3 = [value for value in lst1 if value in lst2] 
+        def intersection(lst1, lst2):
+            lst3 = [value for value in lst1 if value in lst2]
             return lst3
 
-        actView = cmds.getPanel(wf=True) 
+        actView = cmds.getPanel(wf=True)
 
         if actView not in cmds.getPanel(type='modelPanel'):
-            visiblePanel = cmds.getPanel( visiblePanels=True)
+            visiblePanel = cmds.getPanel(visiblePanels=True)
             allModelPanel = cmds.getPanel(type="modelPanel")
-            visibleModelPanel = intersection( allModelPanel, visiblePanel)
+            visibleModelPanel = intersection(allModelPanel, visiblePanel)
             actView = visibleModelPanel[0]
 
         view = OpenMayaUI.M3dView()
@@ -107,12 +108,12 @@ class ThumbnailManager(object):
         cam = OpenMaya.MDagPath()
         view.getCamera(cam)
         camPath = cam.partialPathName()
-        
+
         return (actView, view, camPath)
 
     @classmethod
-    def simplifyView( cls, actView ):
-        # hide UI elements   
+    def simplifyView(cls, actView):
+        # hide UI elements
 
         attrKeys = ['sel', 'manipulators', 'grid', 'hud', 'hos', 'cameras']
         attrValues = [0, 0, 0, 0, 0, 0]
@@ -121,46 +122,51 @@ class ThumbnailManager(object):
         # get old values
 
         for attr in attrKeys:
-            attrOldValues.append(cmds.modelEditor(actView, q=1, **{ attr : True } ) )
-            
+            attrOldValues.append(cmds.modelEditor(
+                actView, q=1, **{attr: True}))
 
         # set wanted values
 
         for i in range(len(attrKeys)):
-            attrOldValues.append(cmds.modelEditor(actView, e=1, **{ attrKeys[i] : attrValues[i] } ) )
+            attrOldValues.append(cmds.modelEditor(
+                actView, e=1, **{attrKeys[i]: attrValues[i]}))
 
         restoreParam = {
-            "keys" : attrKeys,
-            "values" : attrOldValues
+            "keys": attrKeys,
+            "values": attrOldValues
         }
 
-        # show inly selected
+        cmds.duplicate(returnRootsOnly=True)
+        mel.eval('sets -e -forceElement initialShadingGroup;')
 
-        cmds.isolateSelect( actView, state=1 )
-        cmds.isolateSelect( actView, addSelected=True )
+        # show inly selected
+        mel.eval('enableIsolateSelect %s %d' % (actView, 1))
 
         cmds.refresh()
 
         return restoreParam
 
     @classmethod
-    def restoreView( cls, actView, params ):
+    def restoreView(cls, actView, params):
         # restore UI elements
         for i in range(len(params["keys"])):
             attr = params["keys"][i]
-            params["values"].append(cmds.modelEditor(actView, e=1, **{ attr : params["values"][i] } ) )
+            params["values"].append(cmds.modelEditor(
+                actView, e=1, **{attr: params["values"][i]}))
 
         # show unselected
 
-        cmds.isolateSelect( actView, state=False )
-
+        cmds.delete()
+        mel.eval('enableIsolateSelect %s %d' % (actView, 0))
 
     @classmethod
-    def getManualThumbnail( cls ):
+    def getManualThumbnail(cls):
         (actView, view, camPath) = cls.getCurrentViewData()
-        restoreParam = cls.simplifyView( actView )
+        selection = cmds.ls(selection=True)
+        restoreParam = cls.simplifyView(actView)
         pixmap = cls.screenshotView(view)
-        cls.restoreView( actView, restoreParam)
+        cls.restoreView(actView, restoreParam)
+        cmds.select(selection, replace=True)
         return pixmap
 
     @classmethod
@@ -168,20 +174,18 @@ class ThumbnailManager(object):
         dx = pos1[0] - pos2[0]
         dy = pos1[1] - pos2[1]
         dz = pos1[2] - pos2[2]
-        return math.sqrt( dx*dx + dy*dy + dz*dz )
+        return math.sqrt(dx*dx + dy*dy + dz*dz)
 
     @classmethod
-    def getDefaultThumbnail( cls, onSelected = False ):
+    def getDefaultThumbnail(cls, onSelected=False):
 
         (actView, view, camPath) = cls.getCurrentViewData()
 
-        selection = cmds.ls(selection = True)
+        selection = cmds.ls(selection=True)
 
         selectionCenter = MayaManager.getCenterSelected()
 
         # create a new camera and look though
-
-        
 
         cameraName = cmds.camera()
 
@@ -189,38 +193,38 @@ class ThumbnailManager(object):
 
         cmds.viewFit(cameraName[0])
 
-        cameraPos = cmds.xform( cameraName[0], q=True, ws=True, t=True)
+        cameraPos = cmds.xform(cameraName[0], q=True, ws=True, t=True)
         defaultCamPos = [20, 10, 15]
 
-        defaultDistance = cls.distanceBtwPos([0,0,0], defaultCamPos)
+        defaultDistance = cls.distanceBtwPos([0, 0, 0], defaultCamPos)
         distance = cls.distanceBtwPos(selectionCenter, cameraPos)
 
         ratio = 1.3 / defaultDistance * distance
-        defaultCamPos = map(lambda x: x * ratio, defaultCamPos) 
+        defaultCamPos = map(lambda x: x * ratio, defaultCamPos)
 
         if onSelected:
-            cmds.move( defaultCamPos[0] + selectionCenter[0], defaultCamPos[1] + selectionCenter[1], defaultCamPos[2] + selectionCenter[2], cameraName[0] )
-            cmds.viewLookAt( cameraName[0], pos=(selectionCenter[0], selectionCenter[1], selectionCenter[2]) )
+            cmds.move(defaultCamPos[0] + selectionCenter[0], defaultCamPos[1] +
+                      selectionCenter[1], defaultCamPos[2] + selectionCenter[2], cameraName[0])
+            cmds.viewLookAt(cameraName[0], pos=(
+                selectionCenter[0], selectionCenter[1], selectionCenter[2]))
         else:
-            cmds.move( defaultCamPos[0], defaultCamPos[1], defaultCamPos[2], cameraName[0] )
-            cmds.viewLookAt( cameraName[0], pos=(0.0, 0.0, 0.0) )
+            cmds.move(defaultCamPos[0], defaultCamPos[1],
+                      defaultCamPos[2], cameraName[0])
+            cmds.viewLookAt(cameraName[0], pos=(0.0, 0.0, 0.0))
 
-        cmds.lookThru( actView, cameraName[1], nc=0.001, fc=5000.0 )
+        cmds.lookThru(actView, cameraName[1], nc=0.001, fc=5000.0)
 
-        
-
-        restoreParam = cls.simplifyView( actView )
+        restoreParam = cls.simplifyView(actView)
 
         pixmap = cls.screenshotView(view)
 
-    
         # reset the previous camera
 
-        cmds.lookThru( actView, camPath, nc=0.001, fc=5000.0 )
+        cmds.lookThru(actView, camPath, nc=0.001, fc=5000.0)
         cmds.delete(cameraName[0])
 
-        cls.restoreView( actView, restoreParam)
+        cls.restoreView(actView, restoreParam)
+
+        cmds.select(selection, replace=True)
 
         return pixmap
-
-        

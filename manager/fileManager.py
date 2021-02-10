@@ -3,15 +3,22 @@ import datetime
 import time
 import math
 import shutil
+from enum import Enum
 
 from raphScripts.junkbox.resource import resource_rc
 
+
+class FilterMode(Enum):
+    FolderOnly = 1
+    FileOnly = 2
+    FolderAndFile = 3
+
+
 class FileManager(object):
-    dataPath = "C:/Users/rjouretz/Documents/maya/2018/prefs/scripts/raphScripts/junkbox/DATA"
 
     @classmethod
     def getFileThumbnail(cls, filePath):
-        thumbnailPath = filePath.replace(".mb",".jpg")
+        thumbnailPath = filePath.replace(".ma", ".jpg")
 
         if os.path.exists(thumbnailPath):
             return thumbnailPath
@@ -66,17 +73,27 @@ class FileManager(object):
         os.mkdir(folderPath)
 
     @classmethod
-    def getRootFolderPath(cls):
-        return cls.dataPath
+    def getFolders(cls, path, filterKeyword=None, filterMode=None):
 
-    @classmethod
-    def getFolders( cls, path ):
+        def dirContainsKeyword(curPath):
+            if filterKeyword == None:
+                return True
 
-        def dirToDict( curPath ):
+            for root, dirs, files in os.walk(curPath, topdown=False):
+                if (filterMode == FilterMode.FileOnly or filterMode == FilterMode.FolderAndFile) and any(filterKeyword.lower() in s.lower() for s in files):
+                    return True
+                if (filterMode == FilterMode.FolderOnly or filterMode == FilterMode.FolderAndFile) and filterKeyword in cls.getFolderBaseName(root):
+                    return True
+
+            return False
+
+        def dirToDict(curPath):
             curDir = dict()
             for filename in os.listdir(curPath):
-                if os.path.isdir(os.path.join(curPath, filename)):
-                    curDir[filename] =  dirToDict(os.path.join( curPath , filename))
+                path = os.path.join(curPath, filename)
+                if os.path.isdir(path) and dirContainsKeyword(path):
+                    curDir[filename] = dirToDict(
+                        path)
 
             return curDir
 
@@ -87,8 +104,15 @@ class FileManager(object):
         return os.path.normpath(path)
 
     @classmethod
+    def existingPath(cls, path):
+        return os.path.exists(path)
+
+    @classmethod
     def removeFolder(cls, folderPath):
-        shutil.rmtree(folderPath)
+        if not os.listdir(folderPath):
+            os.rmdir(folderPath)
+        else:
+            shutil.rmtree(folderPath)
 
     @classmethod
     def removeMayaFiles(cls, filePaths):
@@ -111,20 +135,29 @@ class FileManager(object):
                     shutil.move(thumbnailPath, destDir)
 
     @classmethod
-    def getMayaFilesFromFolder(cls, folderPath):
+    def getMayaFilesFromFolder(cls, folderPath, filterKeyword=False, recursive=False):
+        tmpList = []
+
+        if recursive:
+            for root, dirs, files in os.walk(folderPath, topdown=False):
+                for name in files:
+                    if name.endswith(".ma"):
+                        if not filterKeyword or filterKeyword.lower() in name.lower():
+                            tmpList.append(os.path.join(
+                                root, name).replace("\\", "/"))
+        else:
+            for filename in os.listdir(folderPath):
+                if filename.endswith(".ma"):
+                    if not filterKeyword or filterKeyword.lower() in name.lower():
+                        tmpList.append(os.path.join(
+                            folderPath, filename).replace("\\", "/"))
         fileList = []
-        for filename in os.listdir(folderPath):
-            if filename.endswith(".mb"): 
-                filePath = os.path.join(folderPath, filename).replace("\\","/")
 
-                curDict = dict()
-                curDict["filePath"] = filePath
-                curDict["thumbnailPath"] = cls.getFileThumbnail(filePath)
+        for filePath in tmpList:
+            curDict = dict()
+            curDict["filePath"] = filePath
+            curDict["thumbnailPath"] = cls.getFileThumbnail(filePath)
 
-                fileList.append(curDict)
-        
+            fileList.append(curDict)
+
         return fileList
-
-            
-
-        

@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'C:/Users/rjouretz/Documents/maya/2018/prefs/scripts/raphScripts/junkbox/ui/mainWindow.ui'
 #
-# Created: Tue Feb  9 22:23:08 2021
+# Created: Wed Feb 10 18:08:53 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -24,22 +24,22 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.newAssetButton)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
-        self.searchLineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.searchLineEdit.setMaximumSize(QtCore.QSize(200, 16777215))
-        self.searchLineEdit.setObjectName("searchLineEdit")
-        self.horizontalLayout_2.addWidget(self.searchLineEdit)
-        self.comboBox = QtWidgets.QComboBox(self.centralwidget)
-        self.comboBox.setObjectName("comboBox")
-        self.comboBox.addItem("")
-        self.comboBox.addItem("")
-        self.horizontalLayout_2.addWidget(self.comboBox)
-        self.pushButton = FlatButton(self.centralwidget)
-        self.pushButton.setText("")
+        self.searchEdit = QtWidgets.QLineEdit(self.centralwidget)
+        self.searchEdit.setMaximumSize(QtCore.QSize(200, 16777215))
+        self.searchEdit.setObjectName("searchEdit")
+        self.horizontalLayout_2.addWidget(self.searchEdit)
+        self.dataPathComboBox = QtWidgets.QComboBox(self.centralwidget)
+        self.dataPathComboBox.setObjectName("dataPathComboBox")
+        self.dataPathComboBox.addItem("")
+        self.dataPathComboBox.addItem("")
+        self.horizontalLayout_2.addWidget(self.dataPathComboBox)
+        self.settingsButton = FlatButton(self.centralwidget)
+        self.settingsButton.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap(":/icon/settings.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.pushButton.setIcon(icon)
-        self.pushButton.setObjectName("pushButton")
-        self.horizontalLayout_2.addWidget(self.pushButton)
+        self.settingsButton.setIcon(icon)
+        self.settingsButton.setObjectName("settingsButton")
+        self.horizontalLayout_2.addWidget(self.settingsButton)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
@@ -98,9 +98,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "MainWindow", None, -1))
         self.newAssetButton.setText(QtWidgets.QApplication.translate("MainWindow", "New Asset", None, -1))
-        self.searchLineEdit.setPlaceholderText(QtWidgets.QApplication.translate("MainWindow", "Search ...", None, -1))
-        self.comboBox.setItemText(0, QtWidgets.QApplication.translate("MainWindow", "Shared Server", None, -1))
-        self.comboBox.setItemText(1, QtWidgets.QApplication.translate("MainWindow", "test", None, -1))
+        self.searchEdit.setPlaceholderText(QtWidgets.QApplication.translate("MainWindow", "Search ...", None, -1))
+        self.dataPathComboBox.setItemText(0, QtWidgets.QApplication.translate("MainWindow", "Shared Server", None, -1))
+        self.dataPathComboBox.setItemText(1, QtWidgets.QApplication.translate("MainWindow", "test", None, -1))
 
 from raphScripts.junkbox.component.flatButton import FlatButton
 from raphScripts.junkbox.component.assetViewWidget import AssetViewWidget

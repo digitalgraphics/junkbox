@@ -7,6 +7,7 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QListWidget, QListWidgetItem
 from PySide2.QtCore import QSize, Qt, Signal
 from PySide2.QtGui import QIcon, QPixmap
 
+
 class AssetViewWidget(QWidget):
     selectionChanged = Signal(list)
 
@@ -15,17 +16,20 @@ class AssetViewWidget(QWidget):
         self.ui = Ui_assetViewWidget()
         self.ui.setupUi(self)
 
-        self.ui.thumbnailViewWidget.setIconSize(QSize(100,100))
+        self.ui.thumbnailViewWidget.setIconSize(QSize(100, 100))
 
-        self.ui.thumbnailViewWidget.itemSelectionChanged.connect(self.listSelectionChanged)
-        self.ui.listViewWidget.itemSelectionChanged.connect(self.treeSelectionChanged)
+        self.ui.thumbnailViewWidget.itemSelectionChanged.connect(
+            self.listSelectionChanged)
+        self.ui.listViewWidget.itemSelectionChanged.connect(
+            self.treeSelectionChanged)
         self.ui.searchEdit.textChanged.connect(self.textSearchChanged)
         self.ui.thumbnailSizeSlider.valueChanged.connect(self.setThumbnailSize)
         self.ui.styleViewButton.buttonPressed.connect(self.styleViewPressed)
-        self.ui.changeCollectionButton.buttonPressed.connect(self.changeCollectionPressed)
+        self.ui.changeCollectionButton.buttonPressed.connect(
+            self.changeCollectionPressed)
         self.ui.removeButton.buttonPressed.connect(self.removePressed)
 
-        self.setThumbnailSize( self.ui.thumbnailSizeSlider.value())
+        self.setThumbnailSize(self.ui.thumbnailSizeSlider.value())
 
         self.showThumbnailView()
         self.ui.collectionLabel.hide()
@@ -38,7 +42,8 @@ class AssetViewWidget(QWidget):
         self.rootDirPath = None
 
     def changeCollectionPressed(self):
-        browseCollectionDialog = BrowseCollectionDialog( self.rootDirPath, self.parent())
+        browseCollectionDialog = BrowseCollectionDialog(
+            self.rootDirPath, self.parent())
 
         if browseCollectionDialog.exec_():
             filePaths = self.getFilePathSelected()
@@ -46,7 +51,8 @@ class AssetViewWidget(QWidget):
             destFolder = browseCollectionDialog.getAbsolutePath()
 
             if FileManager.normPath(curFolder) == FileManager.normPath(destFolder):
-                QMessageBox.warning( self, 'Destination and source match', 'The destination collection corresponds to the source collection', QMessageBox.StandardButton.Ok )
+                QMessageBox.warning(self, 'Destination and source match',
+                                    'The destination collection corresponds to the source collection', QMessageBox.StandardButton.Ok)
             else:
                 FileManager.moveMayaFilesToDir(filePaths, destFolder)
                 self.removeSelectedItems()
@@ -57,9 +63,11 @@ class AssetViewWidget(QWidget):
         message = 'Are you sure to delete 1 asset ?'
 
         if len(filePaths) > 1:
-            message = 'Are you sure to delete ' + str(len(filePaths)) + ' assets ?'
+            message = 'Are you sure to delete ' + \
+                str(len(filePaths)) + ' assets ?'
 
-        reply = QMessageBox.question( self, 'Delete assets', message, QMessageBox.Yes, QMessageBox.No )
+        reply = QMessageBox.question(
+            self, 'Delete assets', message, QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
             FileManager.removeMayaFiles(filePaths)
@@ -69,7 +77,7 @@ class AssetViewWidget(QWidget):
         self.ui.thumbnailViewWidget.blockSignals(True)
         self.ui.listViewWidget.blockSignals(True)
 
-        self.loadFiles(self.fileList)
+        self.loadFiles(self.fileList, self.title, self.rootDirPath)
 
         self.ui.thumbnailViewWidget.blockSignals(False)
         self.ui.listViewWidget.blockSignals(False)
@@ -85,17 +93,16 @@ class AssetViewWidget(QWidget):
             self.showThumbnailView()
             self.ui.thumbnailSizeSlider.setEnabled(True)
 
-    
     def showListView(self):
         self.ui.thumbnailViewWidget.hide()
         self.ui.listViewWidget.show()
 
     def showThumbnailView(self):
         self.ui.listViewWidget.hide()
-        self.ui.thumbnailViewWidget.show()      
+        self.ui.thumbnailViewWidget.show()
 
     def setThumbnailSize(self, size):
-        self.ui.thumbnailViewWidget.setIconSize(QSize(size,size))  
+        self.ui.thumbnailViewWidget.setIconSize(QSize(size, size))
 
     def treeSelectionChanged(self):
         selectedItems = self.ui.listViewWidget.selectedItems()
@@ -106,12 +113,12 @@ class AssetViewWidget(QWidget):
 
         self.updateSelectedItems(selectedIndicesSet)
 
-    def listSelectionChanged(self ):
+    def listSelectionChanged(self):
         selectedItems = self.ui.thumbnailViewWidget.selectedItems()
         selectedIndicesSet = set()
 
         for selectedItem in selectedItems:
-            selectedIndicesSet.add(selectedItem.data( Qt.UserRole))
+            selectedIndicesSet.add(selectedItem.data(Qt.UserRole))
 
         self.updateSelectedItems(selectedIndicesSet)
 
@@ -123,7 +130,7 @@ class AssetViewWidget(QWidget):
         self.removeSelectedTree()
 
         self.ui.thumbnailViewWidget.clearSelection()
-        self.ui.listViewWidget.clearSelection()     
+        self.ui.listViewWidget.clearSelection()
 
         self.ui.thumbnailViewWidget.blockSignals(False)
         self.ui.listViewWidget.blockSignals(False)
@@ -137,16 +144,17 @@ class AssetViewWidget(QWidget):
         selectedItems = self.ui.thumbnailViewWidget.selectedItems()
 
         if not selectedItems:
-            return   
+            return
 
         for item in selectedItems:
-            self.ui.thumbnailViewWidget.takeItem(self.ui.thumbnailViewWidget.row(item))
+            self.ui.thumbnailViewWidget.takeItem(
+                self.ui.thumbnailViewWidget.row(item))
 
     def removeSelectedTree(self):
         selectedItems = self.ui.listViewWidget.selectedItems()
 
         if not selectedItems:
-            return   
+            return
 
         for item in selectedItems:
             self.ui.listViewWidget.invisibleRootItem().removeChild(item)
@@ -157,12 +165,12 @@ class AssetViewWidget(QWidget):
         selectedFilePath = []
 
         for item in selectedItems:
-            selectedFilePath.append(self.assetList[item.data( 0, Qt.UserRole)][2])
+            selectedFilePath.append(
+                self.assetList[item.data(0, Qt.UserRole)][2])
 
         return selectedFilePath
-        
 
-    def updateSelectedItems(self, selectedIndicesSet ):
+    def updateSelectedItems(self, selectedIndicesSet):
 
         # prevent from triggering the "select" event
 
@@ -186,7 +194,7 @@ class AssetViewWidget(QWidget):
             if i in selectedIndicesSet:
                 listWidget.setSelected(True)
                 treeWidget.setSelected(True)
-                selectedFilePath.append( self.assetList[i][2])
+                selectedFilePath.append(self.assetList[i][2])
             else:
                 listWidget.setSelected(False)
                 treeWidget.setSelected(False)
@@ -198,7 +206,7 @@ class AssetViewWidget(QWidget):
         self.ui.thumbnailViewWidget.blockSignals(False)
         self.ui.listViewWidget.blockSignals(False)
 
-    def setTitle( self, title):
+    def setTitle(self, title):
         self.ui.collectionLabel.show()
         self.ui.collectionLabel.setText(title)
 
@@ -214,10 +222,11 @@ class AssetViewWidget(QWidget):
     def loadFolder(self, workingDirPath, rootDirPath):
         fileList = FileManager.getMayaFilesFromFolder(workingDirPath)
         title = FileManager.getFolderBaseName(workingDirPath)
-        self.loadFiles( fileList, title, rootDirPath)
-    
-    def loadFiles( self, fileList, title, rootDirPath): 
+        self.loadFiles(fileList, title, rootDirPath)
+
+    def loadFiles(self, fileList, title, rootDirPath):
         self.rootDirPath = rootDirPath
+        self.title = title
         self.clear()
 
         self.setTitle(title)
@@ -231,16 +240,18 @@ class AssetViewWidget(QWidget):
         for curDict in self.fileList:
             basename = FileManager.getFileBaseName(curDict["filePath"])
 
-            if not filterText or filterText in basename:
-                self.addItem( curDict["filePath"], curDict["thumbnailPath"])
+            if not filterText or filterText.lower() in basename.lower():
+                self.addItem(curDict["filePath"], curDict["thumbnailPath"])
                 nbShownFiles += 1
 
         self.ui.itemCountLabel.show()
 
         if nbShownFiles < 2:
-            self.ui.itemCountLabel.setText("( " + str(nbShownFiles) + " asset )")
+            self.ui.itemCountLabel.setText(
+                "( " + str(nbShownFiles) + " asset )")
         else:
-            self.ui.itemCountLabel.setText("( " + str(nbShownFiles) + " assets )")
+            self.ui.itemCountLabel.setText(
+                "( " + str(nbShownFiles) + " assets )")
 
     def addItem(self, filePath, thumbnailPath):
 
@@ -251,11 +262,10 @@ class AssetViewWidget(QWidget):
         extensionType = FileManager.getFileExtensionType(filePath)
         fileSize = FileManager.getFileSize(filePath)
 
-
-        # add into the list 
+        # add into the list
 
         listWidget = QListWidgetItem(icon, basename)
-        listWidget.setData(Qt.UserRole, len(self.assetList) )
+        listWidget.setData(Qt.UserRole, len(self.assetList))
 
         self.ui.thumbnailViewWidget.addItem(listWidget)
 
@@ -263,7 +273,7 @@ class AssetViewWidget(QWidget):
 
         data = [basename, fileSize, extensionType, modifyDate]
         treeWidget = QTreeWidgetItem(self.ui.listViewWidget, data)
-        treeWidget.setData(0, Qt.UserRole, len(self.assetList) )
+        treeWidget.setData(0, Qt.UserRole, len(self.assetList))
         treeWidget.setIcon(0, icon)
 
-        self.assetList.append( [ listWidget, treeWidget, filePath] )
+        self.assetList.append([listWidget, treeWidget, filePath])

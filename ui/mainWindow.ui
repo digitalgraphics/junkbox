@@ -38,7 +38,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QLineEdit" name="searchLineEdit">
+       <widget class="QLineEdit" name="searchEdit">
         <property name="maximumSize">
          <size>
           <width>200</width>
@@ -51,7 +51,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="dataPathComboBox">
         <item>
          <property name="text">
           <string>Shared Server</string>
@@ -65,7 +65,7 @@
        </widget>
       </item>
       <item>
-       <widget class="FlatButton" name="pushButton">
+       <widget class="FlatButton" name="settingsButton">
         <property name="text">
          <string/>
         </property>
