@@ -112,7 +112,6 @@ def updateVersionLetter(letter):
         return 'a'
 
     lastLetter = letter[-1]
-
     if lastLetter != 'z':
         return letter[:-1] + chr(ord(lastLetter) + 1)
     else:
