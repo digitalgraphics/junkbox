@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>assetHierarchyWidget</class>
+ <widget class="QWidget" name="assetHierarchyWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>299</width>
+    <height>528</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>9</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Collections</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <item>
+        <widget class="FlatButton" name="addCollectionButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../resource/resource.qrc">
+           <normaloff>:/icon/plus.png</normaloff>:/icon/plus.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="FlatButton" name="removeCollectionButton">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset resource="../resource/resource.qrc">
+           <normaloff>:/icon/remove.png</normaloff>:/icon/remove.png</iconset>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="DeselectableTreeWidget" name="treeWidget">
+     <property name="styleSheet">
+      <string notr="true">QTreeView::item {
+	padding: 2px 0;
+	border: none;
+	outline: 0;
+}
+
+QTreeView::item:selected {
+     background-color: #5285A6;
+}
+
+QTreeView{
+	border: none;
+	outline: 0;
+}</string>
+     </property>
+     <property name="sortingEnabled">
+      <bool>true</bool>
+     </property>
+     <attribute name="headerVisible">
+      <bool>false</bool>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>1</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FlatButton</class>
+   <extends>QPushButton</extends>
+   <header>junkbox.component.flatbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>DeselectableTreeWidget</class>
+   <extends>QTreeWidget</extends>
+   <header>junkbox.component.deselectabletreewidget.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../resource/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

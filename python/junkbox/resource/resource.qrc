@@ -1,0 +1,13 @@
+<RCC>
+  <qresource prefix="/">
+    <file>icon/mayaLogo.png</file>
+    <file>icon/collection.png</file>
+    <file>icon/settings.png</file>
+    <file>icon/listView.svg</file>
+    <file>icon/changeCollection.png</file>
+    <file>icon/plus.png</file>
+    <file>icon/refresh.png</file>
+    <file>icon/remove.png</file>
+    <file>icon/thumbnailView.svg</file>
+  </qresource>
+</RCC>
