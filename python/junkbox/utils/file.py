@@ -9,13 +9,22 @@ from enum import Enum
 
 from junkbox.resource import resource_rc
 
-
+"""
+name : FilterMode
+description : enumeration from filter mode
+"""
 class FilterMode(Enum):
     FolderOnly = 1
     FileOnly = 2
     FolderAndFile = 3
 
-
+"""
+name : getFileThumbnail
+description : get the tumbnail path of the given maya file
+param : 
+    - filePath : the file path to get the thumbnail
+return : the path of the thumbnail
+"""
 def getFileThumbnail(filePath):
     thumbnailPath = filePath.replace(".ma", ".jpg")
 
@@ -25,6 +34,14 @@ def getFileThumbnail(filePath):
         return ":/icon/mayaLogo.png"
 
 
+"""
+name : getFileBaseName
+description : get the base name of the given file path
+param : 
+    - filePath : the file path to get the base name
+    - withExtension : True if the extension is kept
+return : the base name ( with extension )
+"""
 def getFileBaseName(filePath, withExtension=True):
     basename = os.path.basename(filePath)
 
@@ -33,27 +50,57 @@ def getFileBaseName(filePath, withExtension=True):
     else:
         return basename.split(".")[0]
 
-
+"""
+name : getFolderBaseName
+description : get the base name of the given folder path
+param : 
+    - dirPath : the folder path to get the base name
+return : the base name of the given folder
+"""
 def getFolderBaseName(dirPath):
     basename = os.path.basename(dirPath)
     return basename
 
-
+"""
+name : getFileCreationDate
+description : get the creation date of the given file path
+param : 
+    - filePath : the file path
+return : the creation date
+"""
 def getFileCreationDate(filePath):
     fileTime = os.path.getctime(filePath)
     return time.strftime('%d-%m-%Y %H:%M', time.gmtime(fileTime))
 
-
+"""
+name : getFileModifyDate
+description : get the formatted modified date of the given file path
+param : 
+    - filePath : the file path
+return : the formatted modified date
+"""
 def getFileModifyDate(filePath):
     fileTime = os.path.getmtime(filePath)
     return time.strftime('%d-%m-%Y %H:%M', time.gmtime(fileTime))
 
-
+"""
+name : getfileExtensionType
+description : get the file extension info of the given file path
+param : 
+    - filePath : the file path
+return : the extension info
+"""
 def getFileExtensionType(filePath):
     filename, extension = os.path.splitext(filePath)
     return extension.replace('.', '') + " File"
 
-
+"""
+name : getFileSize
+description : get the formatted file size if the given file path
+param : 
+    - filePath : the file path
+return : the formatted file size
+"""
 def getFileSize(filePath):
     suffixes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']
     nbytes = os.path.getsize(filePath)
@@ -63,17 +110,39 @@ def getFileSize(filePath):
     f = ('%.2f' % human).rstrip('0').rstrip('.')
     return '%s %s' % (f, suffixes[rank])
 
-
+"""
+name : getFolderPathOfFile
+description : get the folder path of a given file path
+param : 
+    - filePath : the file path
+return : the parent folder path
+"""
 def getFolderPathOfFile(filePath):
     return os.path.dirname(os.path.abspath(filePath))
 
-
+"""
+name : createFolder
+description : create a folder according to the given folder path
+param : 
+    - folderPath : the folder path to create
+"""
 def createFolder(folderPath):
     os.mkdir(folderPath)
 
 
+"""
+name : getFolders
+description : get an objets corresponging to the inner folder
+    hierarchy of the given folder path
+param : 
+    - filterKeyword : a keyword to filter the inner folder
+    - filterMode : the way to apply the filter keyword
+return : an objet that represents the hierarchy of the inner folders
+"""
 def getFolders(path, filterKeyword=None, filterMode=None):
 
+    # check if the directory contains the filter keyword in
+    # its children
     def dirContainsKeyword(curPath):
         if filterKeyword == None:
             return True
@@ -86,6 +155,7 @@ def getFolders(path, filterKeyword=None, filterMode=None):
 
         return False
 
+    # convert a directory to the object with the hierarchy
     def dirToDict(curPath):
         curDir = dict()
         for filename in os.listdir(curPath):
@@ -99,10 +169,24 @@ def getFolders(path, filterKeyword=None, filterMode=None):
     return dirToDict(path)
 
 
+"""
+name : normPath
+description : norm the given file path
+param : 
+    - path : the file path
+return : the normed file path
+"""
 def normPath(path):
     return os.path.normpath(path)
 
 
+"""
+name : existingPath
+description : check if the given path exists
+param : 
+    - path : the path to check
+return : True if the path exists
+"""
 def existingPath(path):
     return os.path.exists(path)
 

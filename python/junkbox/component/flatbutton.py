@@ -1,7 +1,11 @@
-from PySide2.QtWidgets import QWidget, QPushButton
-from PySide2.QtGui import QPixmap, QPainter, QIcon
-from PySide2.QtCore import QSize, Qt, QObject, Signal, Slot
+from PySide2.QtWidgets import QPushButton
+from PySide2.QtCore import QSize, Signal
 
+"""
+name : FlatButton
+description : QPushButton that has flat design et can loop over
+    mutiple icon/action when clicked
+"""
 class FlatButton(QPushButton):
 
     buttonPressed = Signal(int)
@@ -34,6 +38,11 @@ class FlatButton(QPushButton):
     
         self.released.connect(self.buttonClicked)
 
+    """
+    name : detectNumberActions
+    description : detect the number of actions assigned to
+        the current button
+    """
     def detectNumberActions(self):
         if self.actionIcons:
             return
@@ -54,6 +63,11 @@ class FlatButton(QPushButton):
                 stillIcons = False
         
 
+    """
+    name : buttonClicked
+    description : slot that emit the action associated to the
+        current displayed icon
+    """
     def buttonClicked(self): 
         self.detectNumberActions()
 

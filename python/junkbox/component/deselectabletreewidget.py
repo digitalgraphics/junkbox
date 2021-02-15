@@ -1,7 +1,11 @@
 from PySide2.QtWidgets import QTreeWidget
-from PySide2.QtCore import QItemSelectionModel, Signal
+from PySide2.QtCore import Signal
 
-
+"""
+name : DeselectableTreeWidget
+description : QTreeWidget that deselects all selected items
+    when clicking outide all items
+"""
 class DeselectableTreeWidget(QTreeWidget):
 
     itemDeselected = Signal()
@@ -9,7 +13,11 @@ class DeselectableTreeWidget(QTreeWidget):
     def __init__(self, parent=None):
         super(DeselectableTreeWidget, self).__init__(parent)
 
-
+    """
+    name : mousePressEvent
+    description : override mousePressEvent to deselect items
+        when clicking outside the items
+    """
     def mousePressEvent(self, event):
         item = self.indexAt(event.pos())
 

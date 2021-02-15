@@ -9,10 +9,8 @@ import junkbox.utils.mayautil as mayaUtils
 import os
 
 """
-name : 
-description : 
-param : 
-return : 
+name : AssetPreviewWidget
+description : QWidget that reprensents an Assets preview panel 
 """
 class AssetPreviewWidget(QWidget):
 
@@ -21,24 +19,44 @@ class AssetPreviewWidget(QWidget):
         self.ui = Ui_assetPreviewWidget()
         self.ui.setupUi(self)
 
+        # connections
         self.ui.importCopyButton.clicked.connect(self.importCopyClicked)
         self.ui.importReferenceButton.clicked.connect(
             self.importReferenceClicked)
         self.ui.openInMayaButton.clicked.connect(self.openInMayaClicked)
 
+        # setup
         self.filePaths = None
 
+    """
+    name : openInMayaClicked
+    description : slot that opens in maya the previewed asset
+    """
     def openInMayaClicked(self):
         mayaUtils.openInMaya(self.filePaths[0])
 
+    """
+    name : importCopyClicked
+    description : slot that imports in maya the previewed asset
+    """
     def importCopyClicked(self):
         for path in self.filePaths:
             mayaUtils.importScene(path, asReference=False)
 
+    """
+    name : importReferenceClicked
+    description : slot that imports as reference in maya the previewed asset
+    """
     def importReferenceClicked(self):
         for path in self.filePaths:
             mayaUtils.importScene(path, asReference=True)
 
+    """
+    name : previewFiles
+    description : preview the file paths given in argument
+    param : 
+        - filePaths : the file paths to preview
+    """
     def previewFiles(self, filePaths):
         self.filePaths = filePaths
 
@@ -55,6 +73,12 @@ class AssetPreviewWidget(QWidget):
 
             self.updateInfo(self.filePaths[0])
 
+    """
+    name : updateInfo
+    description : set the preview info from the panel according to the given file path
+    param : 
+        - filePath : the file path to get the info
+    """
     def updateInfo(self, filePath):
         self.setThumbnail(fileUtils.getFileThumbnail(filePath))
         self.ui.fileNameLabel.setText(fileUtils.getFileBaseName(filePath))
@@ -66,6 +90,12 @@ class AssetPreviewWidget(QWidget):
         self.ui.fileLastModifiedDateLabel.setText(
             fileUtils.getFileModifyDate(filePath))
 
+    """
+    name : setThumbnail
+    description : set the given thumbnail to the preview panel
+    param : 
+        - pixmap : the pixmap thumbnail to set
+    """
     def setThumbnail(self, pixmap):
         self.ui.blankWidget.hide()
 
