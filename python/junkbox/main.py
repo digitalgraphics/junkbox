@@ -1,6 +1,9 @@
 scriptFolder = "H:/sandbox/raphaelJ/junkbox/python/"
 
-
+"""
+name : reloadAll
+description : reload all the junkbox modules
+"""
 def reloadAll():
     for i in range(2):
         import junkbox.component.flatbutton
@@ -48,7 +51,10 @@ def reloadAll():
         import junkbox.ui.mainwindow
         reload(junkbox.ui.mainwindow)
 
-
+"""
+name : compileResources
+description : compite the resource file using maya binary files
+"""
 def compileResources():
     import subprocess
     mayaFolder = "C:/Program Files/Autodesk/Maya2018/bin/"
@@ -60,7 +66,10 @@ def compileResources():
         bashCommand, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
     output, err = process.communicate()
 
-
+"""
+name : compileUis
+description : compile all the ui files from junkbox/ui to py files
+"""
 def compileUis():
     from pyside2uic import compileUi
     import os
@@ -86,7 +95,14 @@ def compileUis():
             fin.close()
             fout.close()
 
-
+"""
+name : run
+param : 
+    - needCompileresources : True to recompile the resource file
+    - needCompileUis : True to compile all the ui from junkbox/ui
+    - needReloadAll : True to reload all the junkbox modules
+description : run the main junkbox window
+"""
 def run(needCompileResources=False, needCompileUis=False, needReloadAll=False):
 
     if needCompileResources:

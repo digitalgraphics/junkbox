@@ -1,14 +1,17 @@
+from PySide2.QtWidgets import QWidget, QTreeWidgetItem, QInputDialog, QMessageBox
+from PySide2.QtCore import Qt, Signal
+from PySide2.QtGui import QIcon
+
 from junkbox.resource import resource_rc
-import junkbox.utils.file as fileUtils
 from junkbox.ui.assethierarchywidget import Ui_assetHierarchyWidget
 
-from PySide2.QtWidgets import QMainWindow, QWidget, QListWidget, QListWidgetItem, QTreeWidgetItem, QInputDialog, QMessageBox
-from PySide2.QtCore import QSize, Qt, Signal
-from PySide2.QtGui import QIcon, QPixmap
-
 import os
+import junkbox.utils.file as fileUtils
 
-
+"""
+name : assetHierarchyWidget
+description : QWidget that represents the rowsing collection hierarchy panel.
+"""
 class AssetHierarchyWidget(QWidget):
     collectionDoubleClicked = Signal(str)
     collectionClicked = Signal(str)
@@ -20,8 +23,7 @@ class AssetHierarchyWidget(QWidget):
         self.ui = Ui_assetHierarchyWidget()
         self.ui.setupUi(self)
 
-        self.ui.treeWidget.sortByColumn(0, Qt.SortOrder.AscendingOrder)
-
+        # connections
         self.ui.treeWidget.itemDoubleClicked.connect(self.elemDoubleClicked)
         self.ui.treeWidget.itemClicked.connect(self.elemClicked)
         self.ui.treeWidget.itemDeselected.connect(self.elemDeselected)
@@ -30,17 +32,38 @@ class AssetHierarchyWidget(QWidget):
         self.ui.removeCollectionButton.buttonPressed.connect(
             self.removeCollectionClicked)
 
+        # setup
+        self.ui.treeWidget.sortByColumn(0, Qt.SortOrder.AscendingOrder)
         self.dirPath = None
 
+    """
+    name : elemDeselected
+    description : signals that collections are deselected
+    """
     def elemDeselected(self):
         self.collectionDeselected.emit()
 
+    """
+    name : clear
+    description : clear the current collection selection
+    """
     def clear(self):
         self.ui.treeWidget.clear()
 
+    """
+    name : refresh
+    description : refresh the folder displayed in the view
+    """
     def refresh(self):
         self.setFolders(self.dirPath)
 
+    """
+    name : setFolders
+    description : open a folder to display in the view
+    param : 
+        - dirpath : the directory path to open
+        - filterKeyword : pattern to filter the files and folders
+    """
     def setFolders(self, dirpath, filterKeyword=None):
         self.clear()
         self.dirPath = dirpath
@@ -56,6 +79,12 @@ class AssetHierarchyWidget(QWidget):
 
         createDir(self.ui.treeWidget, dirDict)
 
+    """
+    name : openCollectionPath
+    description : open the hierarchy path to according to the given path
+    param : 
+        - collectionPath : the local path of an existing opened folder
+    """
     def openCollectionPath(self, collectionPath):
         collections = collectionPath.split("/")
         parent = self.ui.treeWidget.invisibleRootItem()
@@ -76,6 +105,10 @@ class AssetHierarchyWidget(QWidget):
             self.ui.treeWidget.setCurrentItem(parent)
             self.ui.treeWidget.itemClicked.emit(parent, 0)
 
+    """
+    name : removeCollectionClicked
+    description : remove the selected item from the collection
+    """
     def removeCollectionClicked(self):
         selection = self.ui.treeWidget.selectedItems()
 
@@ -84,6 +117,12 @@ class AssetHierarchyWidget(QWidget):
         else:
             self.removeCollection(selection[0])
 
+    """
+    name : removeCollection
+    description : remove the given qtreewidgetitem from the collection
+    param : 
+        - item : the qtreewidgetitem to remove
+    """
     def removeCollection(self, item):
         if not item:
             QMessageBox.warning(self, 'No collection selected',
@@ -110,6 +149,10 @@ class AssetHierarchyWidget(QWidget):
         fileUtils.removeFolder(fullpath)
         self.collectionRemoved.emit(fullpath)
 
+    """
+    name : addCollectionClicked
+    description : add a collection as child of the selected collection
+    """
     def addCollectionClicked(self):
         selection = self.ui.treeWidget.selectedItems()
         parent = self.ui.treeWidget.invisibleRootItem()
@@ -164,6 +207,13 @@ class AssetHierarchyWidget(QWidget):
                 parent.setExpanded(True)
             self.addCollection(text, parent)
 
+    """
+    name : addCollection
+    description : add a collection named 'name' as child of the given parent
+    param : 
+        - name : the name of the new collection
+        - parent : the parent of the new collection 
+    """
     def addCollection(self, name, parent):
         item = QTreeWidgetItem(parent, [name])
         item.setIcon(0, QIcon(":/icon/collection.png"))
@@ -176,14 +226,35 @@ class AssetHierarchyWidget(QWidget):
         fileUtils.createFolder(fullpath)
         self.ui.treeWidget.itemClicked.emit(item, 0)
 
+    """
+    name : elemDoubleClicked
+    description : emit the collectionDoubleClicked signal 
+        with the local path of the selected collection
+    param : 
+        - collection : the selected collection
+        - column : the selected column
+    """
     def elemDoubleClicked(self, collection, column):
         localPath = self.getSelectedCollectionPath()
         self.collectionDoubleClicked.emit(localPath)
 
+    """
+    name : elemClicked
+    description : emit the collectionClicked signal with the
+        local path of the selected collection
+    param : 
+        - collection : the selected collection
+        - column : the selected column
+    """
     def elemClicked(self, collection, column):
         localPath = self.getSelectedCollectionPath()
         self.collectionClicked.emit(localPath)
 
+    """
+    name : getSelectedCOllectionName
+    description : get the name of the selected collection
+    return : the name of the selected collection
+    """
     def getSelectedCollectionName(self):
         selection = self.ui.treeWidget.selectedItems()
 
@@ -192,6 +263,13 @@ class AssetHierarchyWidget(QWidget):
 
         return selection[0].text(0)
 
+    """
+    name : getSelectedCollectionPath
+    description : get the path of the selected collection
+    param : 
+        - fullPath : True to get the fullpath (local otherwise)
+    return : the path of the selected collection
+    """
     def getSelectedCollectionPath(self, fullPath=False):
         selection = self.ui.treeWidget.selectedItems()
 
@@ -202,6 +280,13 @@ class AssetHierarchyWidget(QWidget):
 
         return self.getCollectionPath(curItem, fullPath)
 
+    """
+    name : getCollectionPath
+    description : get the path of the given collection
+    param : 
+        - fullPath : True to get the full path (local otherwise)
+    return : the path of the selected collection
+    """
     def getCollectionPath(self, item, fullPath=False):
         path = ""
         while type(item) != type(None):

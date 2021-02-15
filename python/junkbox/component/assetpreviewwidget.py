@@ -1,16 +1,19 @@
-from junkbox.resource import resource_rc
+from PySide2.QtWidgets import QWidget, QGraphicsScene
+from PySide2.QtCore import Qt
+
+from junkbox.ui.assetpreviewwidget import Ui_assetPreviewWidget
+
 import junkbox.utils.file as fileUtils
 import junkbox.utils.mayautil as mayaUtils
-from junkbox.ui.assetpreviewwidget import Ui_assetPreviewWidget
-from junkbox.view.browsecollectiondialog import BrowseCollectionDialog
-
-from PySide2.QtWidgets import QWidget, QMessageBox, QGraphicsScene
-from PySide2.QtCore import QSize, Qt, Signal
-from PySide2.QtGui import QIcon, QPixmap
 
 import os
 
-
+"""
+name : 
+description : 
+param : 
+return : 
+"""
 class AssetPreviewWidget(QWidget):
 
     def __init__(self, *args, **kwargs):
