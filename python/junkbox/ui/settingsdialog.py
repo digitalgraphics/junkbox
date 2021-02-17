@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/settingsdialog.ui'
 #
-# Created: Thu Feb 11 17:32:55 2021
+# Created: Wed Feb 17 13:46:53 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -34,6 +34,17 @@ class Ui_settingsDialog(object):
         self.verticalLayout_2.addItem(spacerItem)
         self.horizontalLayout.addLayout(self.verticalLayout_2)
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.label = QtWidgets.QLabel(settingsDialog)
+        self.label.setObjectName("label")
+        self.horizontalLayout_2.addWidget(self.label)
+        self.filePathEdit = QtWidgets.QLineEdit(settingsDialog)
+        self.filePathEdit.setEnabled(False)
+        self.filePathEdit.setReadOnly(True)
+        self.filePathEdit.setObjectName("filePathEdit")
+        self.horizontalLayout_2.addWidget(self.filePathEdit)
+        self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.buttonBox = QtWidgets.QDialogButtonBox(settingsDialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
@@ -51,5 +62,7 @@ class Ui_settingsDialog(object):
         self.treeWidget.headerItem().setText(1, QtWidgets.QApplication.translate("settingsDialog", "path", None, -1))
         self.addButton.setText(QtWidgets.QApplication.translate("settingsDialog", "Add", None, -1))
         self.removeButton.setText(QtWidgets.QApplication.translate("settingsDialog", "Remove", None, -1))
+        self.label.setText(QtWidgets.QApplication.translate("settingsDialog", "settings file path : ", None, -1))
 
 from junkbox.component.deselectabletreewidget import DeselectableTreeWidget
+from junkbox.resource import resource_rc

@@ -11,6 +11,8 @@ from PySide2.QtGui import QIcon
 name : AssetViewWidget
 description : QWidget that represents a asset viewer (thumbnail or list)
 """
+
+
 class AssetViewWidget(QWidget):
     selectionChanged = Signal(list)
 
@@ -44,12 +46,14 @@ class AssetViewWidget(QWidget):
 
         self.assetList = []
         self.rootDirPath = None
+        self.filterText = ""
 
     """
     name : changeCollectionPressed
     description : slot that move the selected assets from the view to another
         collection destination
     """
+
     def changeCollectionPressed(self):
         browseCollectionDialog = BrowseCollectionDialog(
             self.rootDirPath, self.parent())
@@ -71,6 +75,7 @@ class AssetViewWidget(QWidget):
     description : slot that remove from the current collection the 
         selected assets
     """
+
     def removePressed(self):
         filePaths = self.getFilePathSelected()
 
@@ -94,6 +99,7 @@ class AssetViewWidget(QWidget):
     param : 
         - text : the text filter to use
     """
+
     def textSearchChanged(self, text):
         self.ui.thumbnailViewWidget.blockSignals(True)
         self.ui.listViewWidget.blockSignals(True)
@@ -111,6 +117,7 @@ class AssetViewWidget(QWidget):
     param : 
         - size : the size to set
     """
+
     def setThumbnailSize(self, size):
         self.ui.assetViewWidget.setThumbnailSize(size)
 
@@ -121,6 +128,7 @@ class AssetViewWidget(QWidget):
     param : 
          - index : 1 for thumbnail style. List style otherwise
     """
+
     def styleViewPressed(self, index):
         if index == 1:
             self.showListView()
@@ -133,6 +141,7 @@ class AssetViewWidget(QWidget):
     name : showListView
     description : show the assets using the list style
     """
+
     def showListView(self):
         self.ui.thumbnailViewWidget.hide()
         self.ui.listViewWidget.show()
@@ -141,6 +150,7 @@ class AssetViewWidget(QWidget):
     name : showThumbnailView
     description : show the assets using the thumbnail style
     """
+
     def showThumbnailView(self):
         self.ui.listViewWidget.hide()
         self.ui.thumbnailViewWidget.show()
@@ -153,6 +163,7 @@ class AssetViewWidget(QWidget):
         - size : the size to set
     return : 
     """
+
     def setThumbnailSize(self, size):
         self.ui.thumbnailViewWidget.setIconSize(QSize(size, size))
 
@@ -161,6 +172,7 @@ class AssetViewWidget(QWidget):
     description : slot that selects all the items from the thumbnail 
         view that are selected from the list view
     """
+
     def treeSelectionChanged(self):
         selectedItems = self.ui.listViewWidget.selectedItems()
         selectedIndicesSet = set()
@@ -175,6 +187,7 @@ class AssetViewWidget(QWidget):
     description : slot that selects all the items from the list 
         view that are selected from the thumbnail view
     """
+
     def listSelectionChanged(self):
         selectedItems = self.ui.thumbnailViewWidget.selectedItems()
         selectedIndicesSet = set()
@@ -189,6 +202,7 @@ class AssetViewWidget(QWidget):
     description : remove the items selected from the list 
         view and thumbnail view
     """
+
     def removeSelectedItems(self):
         self.ui.thumbnailViewWidget.blockSignals(True)
         self.ui.listViewWidget.blockSignals(True)
@@ -211,6 +225,7 @@ class AssetViewWidget(QWidget):
     name : removeSelectedList
     description : remove selected items from the thumbnail view
     """
+
     def removeSelectedList(self):
         selectedItems = self.ui.thumbnailViewWidget.selectedItems()
 
@@ -225,6 +240,7 @@ class AssetViewWidget(QWidget):
     name : removeSelectedTree
     description : remove selected items form the list view
     """
+
     def removeSelectedTree(self):
         selectedItems = self.ui.listViewWidget.selectedItems()
 
@@ -240,6 +256,7 @@ class AssetViewWidget(QWidget):
     description : get the file paths of the selected items
     return : a list containing the file paths
     """
+
     def getFilePathSelected(self):
         selectedItems = self.ui.listViewWidget.selectedItems()
         selectedFilePath = []
@@ -258,6 +275,7 @@ class AssetViewWidget(QWidget):
         - selectedIndicesSet : a set containing indices of items 
             to selecte
     """
+
     def updateSelectedItems(self, selectedIndicesSet):
 
         # prevent from triggering the "select" event
@@ -300,6 +318,7 @@ class AssetViewWidget(QWidget):
     param : 
         - title : the title to set
     """
+
     def setTitle(self, title):
         self.ui.collectionLabel.show()
         self.ui.collectionLabel.setText(title)
@@ -308,6 +327,7 @@ class AssetViewWidget(QWidget):
     name : clear
     description : clear the asset view (title, info, items, ..)
     """
+
     def clear(self):
         self.ui.thumbnailViewWidget.clear()
         self.ui.listViewWidget.clear()
@@ -326,6 +346,7 @@ class AssetViewWidget(QWidget):
         - rootDirPath : the root folder of the current project that
             contains all the collections
     """
+
     def loadFolder(self, workingDirPath, rootDirPath):
         fileList = fileUtils.getMayaFilesFromFolder(workingDirPath)
         title = fileUtils.getFolderBaseName(workingDirPath)
@@ -340,6 +361,7 @@ class AssetViewWidget(QWidget):
         - rootDirPath : the root folder that contains all the collection
             of the current project
     """
+
     def loadFiles(self, fileList, title, rootDirPath):
         self.rootDirPath = rootDirPath
         self.title = title
@@ -374,6 +396,7 @@ class AssetViewWidget(QWidget):
         - filePath : the file path of the asset to add
         - thumbnailPath : the thumbnail path of the asset to add
     """
+
     def addItem(self, filePath, thumbnailPath):
 
         icon = QIcon(thumbnailPath)

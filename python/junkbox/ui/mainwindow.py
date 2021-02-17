@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/mainwindow.ui'
 #
-# Created: Thu Feb 11 17:32:55 2021
+# Created: Wed Feb 17 13:46:53 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!

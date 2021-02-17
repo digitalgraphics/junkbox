@@ -1,5 +1,6 @@
 <RCC>
   <qresource prefix="/">
+    <file>icon/changeDirectory.png</file>
     <file>icon/mayaLogo.png</file>
     <file>icon/collection.png</file>
     <file>icon/settings.png</file>

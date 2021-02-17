@@ -283,7 +283,6 @@ def writeJsonFile(data, filePath):
 
 
 def readJsonFile(filePath):
-    print filePath
     if existingPath(filePath):
         with open(filePath) as json_file:
             return json.load(json_file)

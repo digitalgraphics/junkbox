@@ -87,26 +87,56 @@ def getCurrentViewData():
 def simplifyView(actView):
     # hide UI elements
 
-    attrKeys = ['sel', 'manipulators', 'grid', 'hud', 'hos', 'cameras']
-    attrValues = [0, 0, 0, 0, 0, 0]
-    attrOldValues = []
+    attributes = [
+        {
+            "key": "sel",
+            "newValue": 0,
+        },
+        {
+            "key": "manipulators",
+            "newValue": 0,
+        },
+        {
+            "key": "grid",
+            "newValue": 0,
+        },
+        {
+            "key": "hud",
+            "newValue": 0,
+        },
+        {
+            "key": "hos",
+            "newValue": 0,
+        },
+        {
+            "key": "cameras",
+            "newValue": 0,
+        },
+        {
+            "key": "displayAppearance",
+            "newValue": "smoothShaded",
+        },
+        {
+            "key": "displayLights",
+            "newValue": "default",
+        },
+        {
+            "key": "displayTextures",
+            "newValue": 0,
+        },
+    ]
 
     # get old values
 
-    for attr in attrKeys:
-        attrOldValues.append(cmds.modelEditor(
-            actView, q=1, **{attr: True}))
+    for attr in attributes:
+        attr["oldValue"] = cmds.modelEditor(
+            actView, q=1, **{attr["key"]: True})
 
     # set wanted values
 
-    for i in range(len(attrKeys)):
-        attrOldValues.append(cmds.modelEditor(
-            actView, e=1, **{attrKeys[i]: attrValues[i]}))
-
-    restoreParam = {
-        "keys": attrKeys,
-        "values": attrOldValues
-    }
+    for attr in attributes:
+        cmds.modelEditor(
+            actView, e=1, **{attr["key"]: attr["newValue"]})
 
     cmds.duplicate(returnRootsOnly=True)
     mel.eval('sets -e -forceElement initialShadingGroup;')
@@ -116,15 +146,14 @@ def simplifyView(actView):
 
     cmds.refresh()
 
-    return restoreParam
+    return attributes
 
 
-def restoreView(actView, params):
+def restoreView(actView, attributes):
     # restore UI elements
-    for i in range(len(params["keys"])):
-        attr = params["keys"][i]
-        params["values"].append(cmds.modelEditor(
-            actView, e=1, **{attr: params["values"][i]}))
+    for attr in attributes:
+        cmds.modelEditor(
+            actView, e=1, **{attr["key"]: attr["oldValue"]})
 
     # show unselected
 

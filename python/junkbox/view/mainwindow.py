@@ -32,7 +32,7 @@ class MainWindow(QMainWindow):
         self.ui.setupUi(self)
 
         self.historyPath = [
-            s for s in sys.path if 'prefs' in s][0] + "/junkbox_history.json"
+            s for s in sys.path if 'prefs' in s][0] + "/junkbox_settings.json"
 
         self.ui.newAssetButton.clicked.connect(self.openCreationDialog)
         self.ui.assetHierarchyWidget.collectionClicked.connect(
@@ -65,9 +65,10 @@ class MainWindow(QMainWindow):
         self.updateWorkingDataPaths()
 
     def settingsPressed(self):
-        settingsDialog = SettingsDialog(self.dataPaths)
+        settingsDialog = SettingsDialog(self.dataPaths, self.historyPath)
 
         if settingsDialog.exec_():
+            self.historyPath = settingsDialog.getHistoryPath()
             self.dataPaths = settingsDialog.getDataPaths()
             self.updateWorkingDataPaths()
 

@@ -7,7 +7,7 @@ from PySide2.QtGui import QIcon, QPixmap
 
 
 class SettingsDialog(QDialog):
-    def __init__(self, dataPaths, parent=None):
+    def __init__(self, dataPaths, historyPath, parent=None):
         super(SettingsDialog, self).__init__(parent)
         self.ui = Ui_settingsDialog()
         self.ui.setupUi(self)
@@ -21,9 +21,9 @@ class SettingsDialog(QDialog):
         self.ui.treeWidget.itemDeselected.connect(self.selectionChanged)
 
         self.ui.removeButton.setEnabled(False)
+        self.ui.filePathEdit.setText(historyPath)
 
     def selectionChanged(self):
-        print self.ui.treeWidget.selectedItems()
         if len(self.ui.treeWidget.selectedItems()) > 0:
             self.ui.removeButton.setEnabled(True)
         else:
@@ -84,3 +84,6 @@ class SettingsDialog(QDialog):
                 dataPaths.append([name, path, isEditable])
 
         return dataPaths
+
+    def getHistoryPath(self):
+        return self.ui.filePathEdit.text()
