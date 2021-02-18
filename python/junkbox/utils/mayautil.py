@@ -13,6 +13,11 @@ def isEmptySelection():
         return False
 
 
+def updateThumbnail(filePath, pixmap):
+    thumbnailFilename = fileUtils.getPathThumbnail(filePath)
+    pixmap.save(thumbnailFilename, 'jpg')
+
+
 def saveMayaSelection(path, filename, pixmap, centered=False):
     if filename[0] == "/" or filename[1] == "\\":
         filename = filename[1:]
@@ -30,8 +35,12 @@ def saveMayaSelection(path, filename, pixmap, centered=False):
     if centered:
         groupSelected(filename)
 
-    cmds.file(mayaFilename, force=True, options="v=0;",
-              type="mayaAscii", preserveReferences=True, exportSelected=True)
+    cmds.file(mayaFilename,
+              force=True,
+              options="v=0;",
+              type="mayaAscii",
+              preserveReferences=True,
+              exportSelected=True)
     pixmap.save(thumbnailFilename, 'jpg')
 
     if centered:
@@ -43,19 +52,27 @@ def saveMayaSelection(path, filename, pixmap, centered=False):
 def openInMaya(filename):
     try:
         mel.eval(
-            'file -options "v=0;"  -ignoreVersion  -typ "mayaAscii" -o "' + filename + '";')
+            'file -options "v=0;"  -ignoreVersion  -typ "mayaAscii" -o "' +
+            filename + '";')
     except RuntimeError:
-        reply = cmds.confirmDialog(title='Unsaved changes',
-                                   message='Save the current scene before opening the new one ?', button=['Yes', 'No'], defaultButton='Yes', cancelButton='No', dismissString='Close')
+        reply = cmds.confirmDialog(
+            title='Unsaved changes',
+            message='Save the current scene before opening the new one ?',
+            button=['Yes', 'No'],
+            defaultButton='Yes',
+            cancelButton='No',
+            dismissString='Close')
 
         if reply == 'Yes':
             cmds.file(save=True)
             mel.eval(
-                'file -options "v=0;"  -ignoreVersion  -typ "mayaAscii" -o "' + filename + '";')
+                'file -options "v=0;"  -ignoreVersion  -typ "mayaAscii" -o "' +
+                filename + '";')
             mel.eval('addRecentFile("' + filename + '", "mayaAscii");')
         elif reply == 'No':
             mel.eval(
-                'file -f -options "v=0;"  -ignoreVersion  -typ "mayaAscii" -o "' + filename + '";')
+                'file -f -options "v=0;"  -ignoreVersion  -typ "mayaAscii" -o "'
+                + filename + '";')
             mel.eval('addRecentFile("' + filename + '", "mayaAscii");')
 
 
@@ -63,10 +80,14 @@ def importScene(filename, asReference=True):
     basename = fileUtils.getFileBaseName(filename, withExtension=False)
 
     if asReference:
-        mel.eval('file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "' +
-                 basename + '" -options "v=0;" "' + filename + '";')
+        mel.eval(
+            'file -r -type "mayaAscii"  -ignoreVersion -gl -mergeNamespacesOnClash false -namespace "'
+            + basename + '" -options "v=0;" "' + filename + '";')
     else:
-        mel.eval('file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash false -rpr "" -options "v=0;"  -pr  -importTimeRange "combine" "' + filename + '";')
+        mel.eval(
+            'file -import -type "mayaAscii"  -ignoreVersion -ra true -mergeNamespacesOnClash true -namespace "xx" -options "v=0;"  -pr  -importTimeRange "combine" "'
+            + filename + '";')
+        mel.eval('namespace -mergeNamespaceWithRoot -removeNamespace "xx";')
 
 
 def groupSelected(groupName):
@@ -85,16 +106,20 @@ def groupSelected(groupName):
     pivot = map(lambda x: -x, pivot)
 
     cmds.move(pivot[0], pivot[1], pivot[2], grp, relative=True)
-    cmds.makeIdentity(apply=True, translate=True, scale=True,
-                      rotate=True, normal=False, preserveNormals=True)
+    cmds.makeIdentity(apply=True,
+                      translate=True,
+                      scale=True,
+                      rotate=True,
+                      normal=False,
+                      preserveNormals=True)
 
 
 def getCenterSelected():
     selection = cmds.ls(selection=True)
 
     bbox = cmds.exactWorldBoundingBox(selection)
-    centroid = [(bbox[0] + bbox[3]) / 2, (bbox[1] +
-                                          bbox[4]) / 2, (bbox[2] + bbox[5]) / 2]
+    centroid = [(bbox[0] + bbox[3]) / 2, (bbox[1] + bbox[4]) / 2,
+                (bbox[2] + bbox[5]) / 2]
 
     return centroid
 

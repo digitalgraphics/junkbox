@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/settingsdialog.ui'
+# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/settingsdialog.ui'
 #
-# Created: Wed Feb 17 13:46:53 2021
+# Created: Thu Feb 18 10:01:27 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -57,9 +57,9 @@ class Ui_settingsDialog(object):
         QtCore.QMetaObject.connectSlotsByName(settingsDialog)
 
     def retranslateUi(self, settingsDialog):
-        settingsDialog.setWindowTitle(QtWidgets.QApplication.translate("settingsDialog", "Dialog", None, -1))
+        settingsDialog.setWindowTitle(QtWidgets.QApplication.translate("settingsDialog", "Settings", None, -1))
         self.treeWidget.headerItem().setText(0, QtWidgets.QApplication.translate("settingsDialog", "name", None, -1))
-        self.treeWidget.headerItem().setText(1, QtWidgets.QApplication.translate("settingsDialog", "path", None, -1))
+        self.treeWidget.headerItem().setText(1, QtWidgets.QApplication.translate("settingsDialog", "repository path", None, -1))
         self.addButton.setText(QtWidgets.QApplication.translate("settingsDialog", "Add", None, -1))
         self.removeButton.setText(QtWidgets.QApplication.translate("settingsDialog", "Remove", None, -1))
         self.label.setText(QtWidgets.QApplication.translate("settingsDialog", "settings file path : ", None, -1))

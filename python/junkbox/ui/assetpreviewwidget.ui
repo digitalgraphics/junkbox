@@ -82,6 +82,17 @@
             </property>
            </spacer>
           </item>
+          <item>
+           <widget class="FlatButton" name="refreshButton">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource/resource.qrc">
+              <normaloff>:/icon/refresh.png</normaloff>:/icon/refresh.png</iconset>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -298,7 +309,7 @@
         <item>
          <widget class="QPushButton" name="openInMayaButton">
           <property name="text">
-           <string>open in maya</string>
+           <string>open in Maya</string>
           </property>
          </widget>
         </item>
@@ -364,6 +375,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>FlatButton</class>
+   <extends>QPushButton</extends>
+   <header>junkbox.component.flatbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resource/resource.qrc"/>
  </resources>

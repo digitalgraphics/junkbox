@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/creationdialog.ui'
+# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/creationdialog.ui'
 #
-# Created: Wed Feb 17 13:46:53 2021
+# Created: Thu Feb 18 10:01:27 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -55,42 +55,9 @@ class Ui_creationDialog(object):
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self.collectionWidget)
         self.horizontalLayout.addLayout(self.formLayout)
         self.verticalLayout.addWidget(self.groupBox_3)
-        self.manualScreenshotBox = QtWidgets.QGroupBox(creationDialog)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.manualScreenshotBox.sizePolicy().hasHeightForWidth())
-        self.manualScreenshotBox.setSizePolicy(sizePolicy)
-        self.manualScreenshotBox.setCheckable(True)
-        self.manualScreenshotBox.setChecked(False)
-        self.manualScreenshotBox.setObjectName("manualScreenshotBox")
-        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.manualScreenshotBox)
-        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        self.captureButton = QtWidgets.QPushButton(self.manualScreenshotBox)
-        self.captureButton.setObjectName("captureButton")
-        self.horizontalLayout_3.addWidget(self.captureButton)
-        self.verticalLayout.addWidget(self.manualScreenshotBox)
-        self.groupBox = QtWidgets.QGroupBox(creationDialog)
-        self.groupBox.setCheckable(False)
-        self.groupBox.setObjectName("groupBox")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.groupBox)
-        self.horizontalLayout_2.setSpacing(0)
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.previewView = QtWidgets.QGraphicsView(self.groupBox)
-        self.previewView.setStyleSheet("background: transparent")
-        self.previewView.setObjectName("previewView")
-        self.horizontalLayout_2.addWidget(self.previewView)
-        self.emptySelectionLabel = QtWidgets.QLabel(self.groupBox)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.emptySelectionLabel.sizePolicy().hasHeightForWidth())
-        self.emptySelectionLabel.setSizePolicy(sizePolicy)
-        self.emptySelectionLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.emptySelectionLabel.setObjectName("emptySelectionLabel")
-        self.horizontalLayout_2.addWidget(self.emptySelectionLabel)
-        self.verticalLayout.addWidget(self.groupBox)
+        self.thumbnailWidget = ThumbnailWidget(creationDialog)
+        self.thumbnailWidget.setObjectName("thumbnailWidget")
+        self.verticalLayout.addWidget(self.thumbnailWidget)
         self.buttonBox = QtWidgets.QDialogButtonBox(creationDialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
@@ -103,14 +70,11 @@ class Ui_creationDialog(object):
         QtCore.QMetaObject.connectSlotsByName(creationDialog)
 
     def retranslateUi(self, creationDialog):
-        creationDialog.setWindowTitle(QtWidgets.QApplication.translate("creationDialog", "Dialog", None, -1))
+        creationDialog.setWindowTitle(QtWidgets.QApplication.translate("creationDialog", "Asset Creation", None, -1))
         self.groupBox_3.setTitle(QtWidgets.QApplication.translate("creationDialog", "New asset", None, -1))
-        self.filenameLabel.setText(QtWidgets.QApplication.translate("creationDialog", "Filename", None, -1))
+        self.filenameLabel.setText(QtWidgets.QApplication.translate("creationDialog", "Asset name", None, -1))
         self.collectionLabel.setText(QtWidgets.QApplication.translate("creationDialog", "Collection", None, -1))
-        self.manualScreenshotBox.setTitle(QtWidgets.QApplication.translate("creationDialog", "Manual Screenshot", None, -1))
-        self.captureButton.setText(QtWidgets.QApplication.translate("creationDialog", "Capture", None, -1))
-        self.groupBox.setTitle(QtWidgets.QApplication.translate("creationDialog", "Preview", None, -1))
-        self.emptySelectionLabel.setText(QtWidgets.QApplication.translate("creationDialog", "Empty Selection", None, -1))
 
+from junkbox.component.thumbnailwidget import ThumbnailWidget
 from junkbox.component.flatbutton import FlatButton
 from junkbox.resource import resource_rc

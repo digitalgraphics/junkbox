@@ -31,7 +31,7 @@
         <item row="0" column="0">
          <widget class="QLabel" name="filenameLabel">
           <property name="text">
-           <string>Filename</string>
+           <string>Asset name</string>
           </property>
          </widget>
         </item>
@@ -90,82 +90,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="manualScreenshotBox">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="title">
-      <string>Manual Screenshot</string>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-     <property name="checked">
-      <bool>false</bool>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QPushButton" name="captureButton">
-        <property name="text">
-         <string>Capture</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox">
-     <property name="title">
-      <string>Preview</string>
-     </property>
-     <property name="checkable">
-      <bool>false</bool>
-     </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <property name="spacing">
-       <number>0</number>
-      </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
-      </property>
-      <item>
-       <widget class="QGraphicsView" name="previewView">
-        <property name="styleSheet">
-         <string notr="true">background: transparent</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="emptySelectionLabel">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="text">
-         <string>Empty Selection</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
+    <widget class="ThumbnailWidget" name="thumbnailWidget" native="true"/>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">
@@ -184,6 +109,12 @@
    <class>FlatButton</class>
    <extends>QPushButton</extends>
    <header>junkbox.component.flatbutton.h</header>
+  </customwidget>
+  <customwidget>
+   <class>ThumbnailWidget</class>
+   <extends>QWidget</extends>
+   <header>junkbox.component.thumbnailwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources>

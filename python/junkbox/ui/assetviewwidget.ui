@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>867</width>
-    <height>301</height>
+    <height>348</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -122,11 +122,11 @@
        </property>
        <property name="icon">
         <iconset resource="../resource/resource.qrc">
-         <normaloff>:/icon/thumbnailView.svg</normaloff>:/icon/thumbnailView.svg</iconset>
+         <normaloff>:/icon/listView.png</normaloff>:/icon/listView.png</iconset>
        </property>
        <property name="icon1" stdset="0">
         <iconset resource="../resource/resource.qrc">
-         <normaloff>:/icon/listView.svg</normaloff>:/icon/listView.svg</iconset>
+         <normaloff>:/icon/thumbnailView.png</normaloff>:/icon/thumbnailView.png</iconset>
        </property>
       </widget>
      </item>

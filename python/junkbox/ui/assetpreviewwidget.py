@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/assetpreviewwidget.ui'
+# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/assetpreviewwidget.ui'
 #
-# Created: Wed Feb 17 13:46:52 2021
+# Created: Thu Feb 18 10:01:27 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -42,6 +42,13 @@ class Ui_assetPreviewWidget(object):
         self.horizontalLayout_2.addWidget(self.label)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
+        self.refreshButton = FlatButton(self.singleAssetWidget)
+        self.refreshButton.setText("")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icon/refresh.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.refreshButton.setIcon(icon)
+        self.refreshButton.setObjectName("refreshButton")
+        self.horizontalLayout_2.addWidget(self.refreshButton)
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
         spacerItem1 = QtWidgets.QSpacerItem(20, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout_6.addItem(spacerItem1)
@@ -170,9 +177,10 @@ class Ui_assetPreviewWidget(object):
         self.fileCreatedDateLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "TextLabel", None, -1))
         self.lastModifiedDateLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "Last modified", None, -1))
         self.fileLastModifiedDateLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "TextLabel", None, -1))
-        self.openInMayaButton.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "open in maya", None, -1))
+        self.openInMayaButton.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "open in Maya", None, -1))
         self.assetSelectedLabel.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "x assets selected", None, -1))
         self.importReferenceButton.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "import as reference", None, -1))
         self.importCopyButton.setText(QtWidgets.QApplication.translate("assetPreviewWidget", "import as copy", None, -1))
 
+from junkbox.component.flatbutton import FlatButton
 from junkbox.resource import resource_rc

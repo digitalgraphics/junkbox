@@ -32,17 +32,18 @@ class SettingsDialog(QDialog):
     def fieldEdited(self, item, column):
         if column == 1 and not fileUtils.existingPath(item.text(1)):
             QMessageBox.warning(self, 'Wrong working path',
-                                'The modified working path does not exist', QMessageBox.StandardButton.Ok)
+                                'The modified working path does not exist',
+                                QMessageBox.StandardButton.Ok)
 
     def addPathClicked(self):
-        path = str(QFileDialog.getExistingDirectory(
-            self, "Select a directory"))
+        path = str(QFileDialog.getExistingDirectory(self,
+                                                    "Select a directory"))
 
         if not path:
             return
 
-        name, ok = QInputDialog.getText(
-            self, 'Path name', 'Enter a name for the new path')
+        name, ok = QInputDialog.getText(self, 'Path name',
+                                        'Enter a name for the new path')
 
         if not ok:
             return
@@ -50,8 +51,9 @@ class SettingsDialog(QDialog):
             self.addDataPath(name, path, True)
 
     def removePathClicked(self):
-        reply = QMessageBox.question(
-            self, 'Delete assets path', "Are you sure to delete the path", QMessageBox.Yes, QMessageBox.No)
+        reply = QMessageBox.question(self, 'Delete assets path',
+                                     "Are you sure to delete the path",
+                                     QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
             selectedItem = self.ui.treeWidget.selectedItems()[0]
@@ -83,7 +85,33 @@ class SettingsDialog(QDialog):
             if fileUtils.existingPath(path):
                 dataPaths.append([name, path, isEditable])
 
+        # remove non existing path
+
+        for i in reversed(range(nbChildren)):
+            item = parent.child(i)
+            path = item.text(1)
+            if not fileUtils.existingPath(path):
+                parent.removeChild(item)
+
         return dataPaths
 
     def getHistoryPath(self):
         return self.ui.filePathEdit.text()
+
+    def accept(self):
+        if len(self.getDataPaths()) == 0:
+            QMessageBox.warning(self, 'No working path',
+                                'Please enter at least one working path',
+                                QMessageBox.StandardButton.Ok)
+            return
+
+        super(SettingsDialog, self).accept()
+
+    def reject(self):
+        if len(self.getDataPaths()) == 0:
+            QMessageBox.warning(self, 'No working path',
+                                'Please enter at least one working path',
+                                QMessageBox.StandardButton.Ok)
+            return
+
+        super(SettingsDialog, self).reject()

@@ -1,9 +1,10 @@
-scriptFolder = "H:/sandbox/raphaelJ/junkbox/python/"
-
+scriptFolder = 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/'
 """
 name : reloadAll
 description : reload all the junkbox modules
 """
+
+
 def reloadAll():
     for i in range(2):
         import junkbox.component.flatbutton
@@ -20,6 +21,8 @@ def reloadAll():
 
         import junkbox.view.settingsdialog
         reload(junkbox.view.settingsdialog)
+        import junkbox.view.thumbnaildialog
+        reload(junkbox.view.thumbnaildialog)
         import junkbox.view.browsecollectiondialog
         reload(junkbox.view.browsecollectiondialog)
         import junkbox.view.creationdialog
@@ -29,6 +32,8 @@ def reloadAll():
 
         import junkbox.component.deselectabletreewidget
         reload(junkbox.component.deselectabletreewidget)
+        import junkbox.component.thumbnailwidget
+        reload(junkbox.component.thumbnailwidget)
         import junkbox.component.assetpreviewwidget
         reload(junkbox.component.assetpreviewwidget)
         import junkbox.component.assetviewwidget
@@ -38,6 +43,10 @@ def reloadAll():
 
         import junkbox.ui.settingsdialog
         reload(junkbox.ui.settingsdialog)
+        import junkbox.ui.thumbnailwidget
+        reload(junkbox.ui.thumbnailwidget)
+        import junkbox.ui.thumbnaildialog
+        reload(junkbox.ui.thumbnaildialog)
         import junkbox.ui.assetpreviewwidget
         reload(junkbox.ui.assetpreviewwidget)
         import junkbox.ui.browsecollectiondialog
@@ -51,25 +60,35 @@ def reloadAll():
         import junkbox.ui.mainwindow
         reload(junkbox.ui.mainwindow)
 
+
 """
 name : compileResources
 description : compite the resource file using maya binary files
 """
+
+
 def compileResources():
     import subprocess
-    mayaFolder = "C:/Program Files/Autodesk/Maya2018/bin/"
+    mayaFolder = "C:/Program Files/Autodesk/Maya2019/bin/"
     qrcFilename = 'junkbox/resource/resource.qrc'
-    bashCommand = [mayaFolder + "pyside2-rcc.exe", scriptFolder +
-                   qrcFilename, "-o", scriptFolder + qrcFilename.replace(".qrc", "_rc.py")]
+    bashCommand = [
+        mayaFolder + "pyside2-rcc.exe", scriptFolder + qrcFilename, "-o",
+        scriptFolder + qrcFilename.replace(".qrc", "_rc.py")
+    ]
 
-    process = subprocess.Popen(
-        bashCommand, stdout=subprocess.PIPE, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    process = subprocess.Popen(bashCommand,
+                               stdout=subprocess.PIPE,
+                               stdin=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
     output, err = process.communicate()
+
 
 """
 name : compileUis
 description : compile all the ui files from junkbox/ui to py files
 """
+
+
 def compileUis():
     from pyside2uic import compileUi
     import os
@@ -89,11 +108,13 @@ def compileUis():
             fout = open(file.replace(".ui", ".py"), "wt")
 
             for line in fin:
-                fout.write(line.replace('import resource_rc',
-                                        'from junkbox.resource import resource_rc'))
+                fout.write(
+                    line.replace('import resource_rc',
+                                 'from junkbox.resource import resource_rc'))
 
             fin.close()
             fout.close()
+
 
 """
 name : run
@@ -103,6 +124,8 @@ param :
     - needReloadAll : True to reload all the junkbox modules
 description : run the main junkbox window
 """
+
+
 def run(needCompileResources=False, needCompileUis=False, needReloadAll=False):
 
     if needCompileResources:

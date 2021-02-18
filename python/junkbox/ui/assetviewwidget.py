@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/assetviewwidget.ui'
+# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/assetviewwidget.ui'
 #
-# Created: Wed Feb 17 13:46:52 2021
+# Created: Thu Feb 18 10:01:27 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -12,7 +12,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 class Ui_assetViewWidget(object):
     def setupUi(self, assetViewWidget):
         assetViewWidget.setObjectName("assetViewWidget")
-        assetViewWidget.resize(867, 301)
+        assetViewWidget.resize(867, 348)
         self.verticalLayout = QtWidgets.QVBoxLayout(assetViewWidget)
         self.verticalLayout.setSpacing(6)
         self.verticalLayout.setContentsMargins(9, 9, 9, 9)
@@ -51,10 +51,10 @@ class Ui_assetViewWidget(object):
         self.styleViewButton = FlatButton(assetViewWidget)
         self.styleViewButton.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(":/icon/thumbnailView.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/icon/listView.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.styleViewButton.setIcon(icon)
         icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap(":/icon/listView.svg"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon1.addPixmap(QtGui.QPixmap(":/icon/thumbnailView.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.styleViewButton.setProperty("icon1", icon1)
         self.styleViewButton.setObjectName("styleViewButton")
         self.horizontalLayout_2.addWidget(self.styleViewButton)

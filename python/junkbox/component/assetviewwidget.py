@@ -5,8 +5,6 @@ from junkbox.view.browsecollectiondialog import BrowseCollectionDialog
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QTreeWidgetItem, QMessageBox
 from PySide2.QtCore import QSize, Qt, Signal
 from PySide2.QtGui import QIcon
-
-
 """
 name : AssetViewWidget
 description : QWidget that represents a asset viewer (thumbnail or list)
@@ -45,6 +43,7 @@ class AssetViewWidget(QWidget):
         self.ui.removeButton.setEnabled(False)
 
         self.assetList = []
+        self.workingDirPath = None
         self.rootDirPath = None
         self.filterText = ""
 
@@ -64,8 +63,10 @@ class AssetViewWidget(QWidget):
             destFolder = browseCollectionDialog.getAbsolutePath()
 
             if fileUtils.normPath(curFolder) == fileUtils.normPath(destFolder):
-                QMessageBox.warning(self, 'Destination and source match',
-                                    'The destination collection corresponds to the source collection', QMessageBox.StandardButton.Ok)
+                QMessageBox.warning(
+                    self, 'Destination and source match',
+                    'The destination collection corresponds to the source collection',
+                    QMessageBox.StandardButton.Ok)
             else:
                 fileUtils.moveMayaFilesToDir(filePaths, destFolder)
                 self.removeSelectedItems()
@@ -85,8 +86,8 @@ class AssetViewWidget(QWidget):
             message = 'Are you sure to delete ' + \
                 str(len(filePaths)) + ' assets ?'
 
-        reply = QMessageBox.question(
-            self, 'Delete assets', message, QMessageBox.Yes, QMessageBox.No)
+        reply = QMessageBox.question(self, 'Delete assets', message,
+                                     QMessageBox.Yes, QMessageBox.No)
 
         if reply == QMessageBox.Yes:
             fileUtils.removeMayaFiles(filePaths)
@@ -262,8 +263,8 @@ class AssetViewWidget(QWidget):
         selectedFilePath = []
 
         for item in selectedItems:
-            selectedFilePath.append(
-                self.assetList[item.data(0, Qt.UserRole)][2])
+            selectedFilePath.append(self.assetList[item.data(0,
+                                                             Qt.UserRole)][2])
 
         return selectedFilePath
 
@@ -337,6 +338,23 @@ class AssetViewWidget(QWidget):
         self.ui.removeButton.setEnabled(False)
         self.assetList = []
 
+    def update(self):
+        selectedItems = self.ui.thumbnailViewWidget.selectedItems()
+        selectedIndicesSet = set()
+
+        for selectedItem in selectedItems:
+            selectedIndicesSet.add(selectedItem.data(Qt.UserRole))
+
+        self.ui.thumbnailViewWidget.blockSignals(True)
+        self.ui.listViewWidget.blockSignals(True)
+
+        self.loadFolder(self.workingDirPath, self.rootDirPath)
+
+        self.ui.thumbnailViewWidget.blockSignals(False)
+        self.ui.listViewWidget.blockSignals(False)
+
+        self.updateSelectedItems(selectedIndicesSet)
+
     """
     name : loadFolder
     description : load the assets from a given folder
@@ -348,6 +366,8 @@ class AssetViewWidget(QWidget):
     """
 
     def loadFolder(self, workingDirPath, rootDirPath):
+        self.workingDirPath = workingDirPath
+        self.rootDirPath = rootDirPath
         fileList = fileUtils.getMayaFilesFromFolder(workingDirPath)
         title = fileUtils.getFolderBaseName(workingDirPath)
         self.loadFiles(fileList, title, rootDirPath)
@@ -376,18 +396,19 @@ class AssetViewWidget(QWidget):
         for curDict in self.fileList:
             basename = fileUtils.getFileBaseName(curDict["filePath"])
 
-            if not self.filterText or self.filterText.lower() in basename.lower():
+            if not self.filterText or self.filterText.lower(
+            ) in basename.lower():
                 self.addItem(curDict["filePath"], curDict["thumbnailPath"])
                 nbShownFiles += 1
 
         self.ui.itemCountLabel.show()
 
         if nbShownFiles < 2:
-            self.ui.itemCountLabel.setText(
-                "( " + str(nbShownFiles) + " asset )")
+            self.ui.itemCountLabel.setText("( " + str(nbShownFiles) +
+                                           " asset )")
         else:
-            self.ui.itemCountLabel.setText(
-                "( " + str(nbShownFiles) + " assets )")
+            self.ui.itemCountLabel.setText("( " + str(nbShownFiles) +
+                                           " assets )")
 
     """
     name : addItem

@@ -52,6 +52,18 @@
       </item>
       <item>
        <widget class="QComboBox" name="dataPathComboBox">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
         <item>
          <property name="text">
           <string>Shared Server</string>

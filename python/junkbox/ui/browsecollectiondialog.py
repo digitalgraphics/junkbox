@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/browsecollectiondialog.ui'
+# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/browsecollectiondialog.ui'
 #
-# Created: Wed Feb 17 13:46:52 2021
+# Created: Thu Feb 18 10:01:27 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -30,6 +30,6 @@ class Ui_browseCollectionDialog(object):
         QtCore.QMetaObject.connectSlotsByName(browseCollectionDialog)
 
     def retranslateUi(self, browseCollectionDialog):
-        browseCollectionDialog.setWindowTitle(QtWidgets.QApplication.translate("browseCollectionDialog", "Dialog", None, -1))
+        browseCollectionDialog.setWindowTitle(QtWidgets.QApplication.translate("browseCollectionDialog", "Collection Browser", None, -1))
 
 from junkbox.component.assethierarchywidget import AssetHierarchyWidget

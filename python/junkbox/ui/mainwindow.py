@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/mainwindow.ui'
+# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/mainwindow.ui'
 #
-# Created: Wed Feb 17 13:46:53 2021
+# Created: Thu Feb 18 10:01:27 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -29,6 +29,12 @@ class Ui_mainWindow(object):
         self.searchEdit.setObjectName("searchEdit")
         self.horizontalLayout_2.addWidget(self.searchEdit)
         self.dataPathComboBox = QtWidgets.QComboBox(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.dataPathComboBox.sizePolicy().hasHeightForWidth())
+        self.dataPathComboBox.setSizePolicy(sizePolicy)
+        self.dataPathComboBox.setMinimumSize(QtCore.QSize(150, 0))
         self.dataPathComboBox.setObjectName("dataPathComboBox")
         self.dataPathComboBox.addItem("")
         self.dataPathComboBox.addItem("")
@@ -96,7 +102,7 @@ class Ui_mainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
     def retranslateUi(self, mainWindow):
-        mainWindow.setWindowTitle(QtWidgets.QApplication.translate("mainWindow", "MainWindow", None, -1))
+        mainWindow.setWindowTitle(QtWidgets.QApplication.translate("mainWindow", "Junkbox Tool", None, -1))
         self.newAssetButton.setText(QtWidgets.QApplication.translate("mainWindow", "New Asset", None, -1))
         self.searchEdit.setPlaceholderText(QtWidgets.QApplication.translate("mainWindow", "Search ...", None, -1))
         self.dataPathComboBox.setItemText(0, QtWidgets.QApplication.translate("mainWindow", "Shared Server", None, -1))

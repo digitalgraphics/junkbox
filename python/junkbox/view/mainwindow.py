@@ -1,5 +1,6 @@
 from junkbox.ui.mainwindow import Ui_mainWindow
 import junkbox.utils.file as fileUtils
+import junkbox.utils.mayautil as mayaUtils
 from junkbox.view.creationdialog import CreationDialog
 from junkbox.view.settingsdialog import SettingsDialog
 
@@ -31,8 +32,8 @@ class MainWindow(QMainWindow):
         self.ui = Ui_mainWindow()
         self.ui.setupUi(self)
 
-        self.historyPath = [
-            s for s in sys.path if 'prefs' in s][0] + "/junkbox_settings.json"
+        self.historyPath = [s for s in sys.path if 'prefs' in s
+                            ][0] + "/junkbox_settings.json"
 
         self.ui.newAssetButton.clicked.connect(self.openCreationDialog)
         self.ui.assetHierarchyWidget.collectionClicked.connect(
@@ -46,14 +47,14 @@ class MainWindow(QMainWindow):
         self.ui.settingsButton.buttonPressed.connect(self.settingsPressed)
         self.ui.dataPathComboBox.currentIndexChanged.connect(
             self.updateCurrentWorkingPath)
+        self.ui.assetPreviewWidget.thumbnailChanged.connect(
+            self.thumbnailUpdated)
 
         self.hidePreview()
         self.creationDialog = None
 
-        name = "Shared Server"
-        path = "H:/sandbox/raphaelJ/junkbox_assets_library"
-        isEditable = False
-        self.dataPaths = [[name, path, isEditable]]
+        self.dataPaths = []
+        self.selectedFilePaths = []
 
         data = fileUtils.readJsonFile(self.historyPath)
 
@@ -62,7 +63,21 @@ class MainWindow(QMainWindow):
                 self.dataPaths.append(
                     [workingPath['name'], workingPath['path'], True])
 
-        self.updateWorkingDataPaths()
+        self.defaultName = "Shared Repository"
+        path = "H:/sandbox/raphaelJ/junkbox_assets_library"
+        isEditable = False
+
+        if len(self.dataPaths) > 0:
+            if fileUtils.existingPath(path):
+                self.dataPaths.insert(0, [self.defaultName, path, isEditable])
+            self.updateWorkingDataPaths()
+        else:
+            self.settingsPressed()
+
+    def thumbnailUpdated(self, pixmap):
+        if len(self.selectedFilePaths) == 1:
+            mayaUtils.updateThumbnail(self.selectedFilePaths[0], pixmap)
+            self.ui.assetViewWidget.update()
 
     def settingsPressed(self):
         settingsDialog = SettingsDialog(self.dataPaths, self.historyPath)
@@ -82,11 +97,8 @@ class MainWindow(QMainWindow):
 
         for name, path, isEditable in self.dataPaths:
             self.ui.dataPathComboBox.addItem(name)
-            if name != self.dataPaths[0][0]:
-                data['workingPath'].append({
-                    'name': name,
-                    'path': path
-                })
+            if name != self.defaultName:
+                data['workingPath'].append({'name': name, 'path': path})
 
         fileUtils.writeJsonFile(data, self.historyPath)
 
@@ -94,15 +106,16 @@ class MainWindow(QMainWindow):
         self.updateCurrentWorkingPath()
 
     def updateCurrentWorkingPath(self):
-        name, path, isEditable = self.dataPaths[self.ui.dataPathComboBox.currentIndex(
-        )]
+        name, path, isEditable = self.dataPaths[
+            self.ui.dataPathComboBox.currentIndex()]
         if fileUtils.existingPath(path):
             self.workingDirPath = path
             self.ui.assetHierarchyWidget.setFolders(self.workingDirPath)
         else:
             self.workingDirPath = None
             QMessageBox.warning(self, 'Wrong working path',
-                                'The selected working path does not exist', QMessageBox.StandardButton.Ok)
+                                'The selected working path does not exist',
+                                QMessageBox.StandardButton.Ok)
 
     def textSearchChanged(self, text):
         text = None if not text else text
@@ -116,8 +129,8 @@ class MainWindow(QMainWindow):
             fileList = fileUtils.getMayaFilesFromFolder(
                 self.workingDirPath, text, True)
             title = "search inside " + self.ui.dataPathComboBox.currentText()
-            self.ui.assetViewWidget.loadFiles(
-                fileList, title, self.workingDirPath)
+            self.ui.assetViewWidget.loadFiles(fileList, title,
+                                              self.workingDirPath)
 
     def hidePreview(self):
         self.ui.assetPreviewWidget.hide()
@@ -134,6 +147,8 @@ class MainWindow(QMainWindow):
         self.ui.assetViewWidget.clear()
 
     def selectionChanged(self, filePaths):
+        self.selectedFilePaths = filePaths
+
         for i in range(2):
             if len(filePaths) < 1:
                 self.hidePreview()

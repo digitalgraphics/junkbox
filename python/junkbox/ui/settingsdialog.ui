@@ -31,7 +31,7 @@
        </column>
        <column>
         <property name="text">
-         <string>path</string>
+         <string>repository path</string>
         </property>
        </column>
       </widget>

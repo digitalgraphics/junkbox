@@ -1,68 +1,64 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/settingsdialog.ui'
+# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/thumbnailwidget.ui'
 #
-# Created: Wed Feb 17 13:46:53 2021
+# Created: Thu Feb 18 10:01:27 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
 
 from PySide2 import QtCore, QtGui, QtWidgets
 
-class Ui_settingsDialog(object):
-    def setupUi(self, settingsDialog):
-        settingsDialog.setObjectName("settingsDialog")
-        settingsDialog.resize(615, 221)
-        self.verticalLayout = QtWidgets.QVBoxLayout(settingsDialog)
+class Ui_thumbnailWidget(object):
+    def setupUi(self, thumbnailWidget):
+        thumbnailWidget.setObjectName("thumbnailWidget")
+        thumbnailWidget.resize(400, 300)
+        self.verticalLayout = QtWidgets.QVBoxLayout(thumbnailWidget)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.treeWidget = DeselectableTreeWidget(settingsDialog)
-        self.treeWidget.setRootIsDecorated(False)
-        self.treeWidget.setObjectName("treeWidget")
-        self.treeWidget.header().setStretchLastSection(True)
-        self.horizontalLayout.addWidget(self.treeWidget)
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.addButton = QtWidgets.QPushButton(settingsDialog)
-        self.addButton.setObjectName("addButton")
-        self.verticalLayout_2.addWidget(self.addButton)
-        self.removeButton = QtWidgets.QPushButton(settingsDialog)
-        self.removeButton.setObjectName("removeButton")
-        self.verticalLayout_2.addWidget(self.removeButton)
-        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout_2.addItem(spacerItem)
-        self.horizontalLayout.addLayout(self.verticalLayout_2)
-        self.verticalLayout.addLayout(self.horizontalLayout)
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.manualScreenshotBox = QtWidgets.QGroupBox(thumbnailWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.manualScreenshotBox.sizePolicy().hasHeightForWidth())
+        self.manualScreenshotBox.setSizePolicy(sizePolicy)
+        self.manualScreenshotBox.setCheckable(True)
+        self.manualScreenshotBox.setChecked(False)
+        self.manualScreenshotBox.setObjectName("manualScreenshotBox")
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.manualScreenshotBox)
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        self.captureButton = QtWidgets.QPushButton(self.manualScreenshotBox)
+        self.captureButton.setObjectName("captureButton")
+        self.horizontalLayout_3.addWidget(self.captureButton)
+        self.verticalLayout.addWidget(self.manualScreenshotBox)
+        self.groupBox = QtWidgets.QGroupBox(thumbnailWidget)
+        self.groupBox.setCheckable(False)
+        self.groupBox.setObjectName("groupBox")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.groupBox)
+        self.horizontalLayout_2.setSpacing(0)
+        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label = QtWidgets.QLabel(settingsDialog)
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label)
-        self.filePathEdit = QtWidgets.QLineEdit(settingsDialog)
-        self.filePathEdit.setEnabled(False)
-        self.filePathEdit.setReadOnly(True)
-        self.filePathEdit.setObjectName("filePathEdit")
-        self.horizontalLayout_2.addWidget(self.filePathEdit)
-        self.verticalLayout.addLayout(self.horizontalLayout_2)
-        self.buttonBox = QtWidgets.QDialogButtonBox(settingsDialog)
-        self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
-        self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
-        self.buttonBox.setObjectName("buttonBox")
-        self.verticalLayout.addWidget(self.buttonBox)
+        self.previewView = QtWidgets.QGraphicsView(self.groupBox)
+        self.previewView.setStyleSheet("background: transparent")
+        self.previewView.setObjectName("previewView")
+        self.horizontalLayout_2.addWidget(self.previewView)
+        self.emptySelectionLabel = QtWidgets.QLabel(self.groupBox)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.emptySelectionLabel.sizePolicy().hasHeightForWidth())
+        self.emptySelectionLabel.setSizePolicy(sizePolicy)
+        self.emptySelectionLabel.setAlignment(QtCore.Qt.AlignCenter)
+        self.emptySelectionLabel.setObjectName("emptySelectionLabel")
+        self.horizontalLayout_2.addWidget(self.emptySelectionLabel)
+        self.verticalLayout.addWidget(self.groupBox)
 
-        self.retranslateUi(settingsDialog)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("accepted()"), settingsDialog.accept)
-        QtCore.QObject.connect(self.buttonBox, QtCore.SIGNAL("rejected()"), settingsDialog.reject)
-        QtCore.QMetaObject.connectSlotsByName(settingsDialog)
+        self.retranslateUi(thumbnailWidget)
+        QtCore.QMetaObject.connectSlotsByName(thumbnailWidget)
 
-    def retranslateUi(self, settingsDialog):
-        settingsDialog.setWindowTitle(QtWidgets.QApplication.translate("settingsDialog", "Dialog", None, -1))
-        self.treeWidget.headerItem().setText(0, QtWidgets.QApplication.translate("settingsDialog", "name", None, -1))
-        self.treeWidget.headerItem().setText(1, QtWidgets.QApplication.translate("settingsDialog", "path", None, -1))
-        self.addButton.setText(QtWidgets.QApplication.translate("settingsDialog", "Add", None, -1))
-        self.removeButton.setText(QtWidgets.QApplication.translate("settingsDialog", "Remove", None, -1))
-        self.label.setText(QtWidgets.QApplication.translate("settingsDialog", "settings file path : ", None, -1))
+    def retranslateUi(self, thumbnailWidget):
+        thumbnailWidget.setWindowTitle(QtWidgets.QApplication.translate("thumbnailWidget", "Form", None, -1))
+        self.manualScreenshotBox.setTitle(QtWidgets.QApplication.translate("thumbnailWidget", "Manual Screenshot", None, -1))
+        self.captureButton.setText(QtWidgets.QApplication.translate("thumbnailWidget", "Capture", None, -1))
+        self.groupBox.setTitle(QtWidgets.QApplication.translate("thumbnailWidget", "Preview", None, -1))
+        self.emptySelectionLabel.setText(QtWidgets.QApplication.translate("thumbnailWidget", "Empty Selection", None, -1))
 
-from junkbox.component.deselectabletreewidget import DeselectableTreeWidget
-import resource_rc
