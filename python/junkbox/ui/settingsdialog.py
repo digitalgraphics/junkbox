@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/settingsdialog.ui'
 #
-# Created: Thu Feb 18 10:01:27 2021
+# Created: Thu Feb 18 14:10:34 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
