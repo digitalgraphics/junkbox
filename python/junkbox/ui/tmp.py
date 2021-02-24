@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/thumbnailwidget.ui'
+# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/thumbnailwidget.ui'
 #
-# Created: Thu Feb 18 14:10:34 2021
+# Created: Mon Feb 22 15:59:02 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!

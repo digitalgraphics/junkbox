@@ -49,6 +49,7 @@ class MainWindow(QMainWindow):
             self.updateCurrentWorkingPath)
         self.ui.assetPreviewWidget.thumbnailChanged.connect(
             self.thumbnailUpdated)
+        self.ui.infoButton.buttonPressed.connect(self.infoPressed)
 
         self.hidePreview()
         self.creationDialog = None
@@ -67,12 +68,17 @@ class MainWindow(QMainWindow):
         path = "H:/sandbox/raphaelJ/junkbox_assets_library"
         isEditable = False
 
-        if len(self.dataPaths) > 0:
+        print fileUtils.existingPath(path)
+
+        if len(self.dataPaths) > 0 or fileUtils.existingPath(path):
             if fileUtils.existingPath(path):
                 self.dataPaths.insert(0, [self.defaultName, path, isEditable])
             self.updateWorkingDataPaths()
         else:
             self.settingsPressed()
+
+    def infoPressed(self):
+        os.startfile("H:/sandbox/raphaelJ/junkbox_documentation.pdf")
 
     def thumbnailUpdated(self, pixmap):
         if len(self.selectedFilePaths) == 1:

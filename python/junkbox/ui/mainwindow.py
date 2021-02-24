@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/junkbox/ui/mainwindow.ui'
+# Form implementation generated from reading ui file 'H:/sandbox/raphaelJ/junkbox/python/junkbox/ui/mainwindow.ui'
 #
-# Created: Thu Feb 18 14:10:34 2021
+# Created: Mon Feb 22 15:59:02 2021
 #      by: pyside2-uic  running on PySide2 2.0.0~alpha0
 #
 # WARNING! All changes made in this file will be lost!
@@ -46,6 +46,13 @@ class Ui_mainWindow(object):
         self.settingsButton.setIcon(icon)
         self.settingsButton.setObjectName("settingsButton")
         self.horizontalLayout_2.addWidget(self.settingsButton)
+        self.infoButton = FlatButton(self.centralwidget)
+        self.infoButton.setText("")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap(":/icon/info.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.infoButton.setIcon(icon1)
+        self.infoButton.setObjectName("infoButton")
+        self.horizontalLayout_2.addWidget(self.infoButton)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)

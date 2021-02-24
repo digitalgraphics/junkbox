@@ -1,4 +1,4 @@
-scriptFolder = 'D:/Documents/maya/2020/prefs/scripts/junkbox/python/'
+scriptFolder = 'H:/sandbox/raphaelJ/junkbox/python/'
 """
 name : reloadAll
 description : reload all the junkbox modules
@@ -69,7 +69,7 @@ description : compite the resource file using maya binary files
 
 def compileResources():
     import subprocess
-    mayaFolder = "C:/Program Files/Autodesk/Maya2019/bin/"
+    mayaFolder = "C:/Program Files/Autodesk/Maya2018/bin/"
     qrcFilename = 'junkbox/resource/resource.qrc'
     bashCommand = [
         mayaFolder + "pyside2-rcc.exe", scriptFolder + qrcFilename, "-o",

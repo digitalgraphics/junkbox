@@ -87,6 +87,17 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="FlatButton" name="infoButton">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource/resource.qrc">
+          <normaloff>:/icon/info.png</normaloff>:/icon/info.png</iconset>
+        </property>
+       </widget>
+      </item>
      </layout>
     </item>
     <item>
